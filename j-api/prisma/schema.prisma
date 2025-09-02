@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model product_cakes {
+  Cake  String  @db.Text
+  Price Int?    @default(0)
+  Img   String? @db.VarChar(1000)
+  ID    Int     @id @default(autoincrement())
+
+}
