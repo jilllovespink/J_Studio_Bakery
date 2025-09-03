@@ -1,79 +1,115 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* 🎨 定義設計 tokens */
+@theme {
+  --color-background: #fff9f6;
+  --color-foreground: #333333;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  --color-primary: #f59e6e;
+  --color-primary-foreground: #ffffff;
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+  --color-secondary: #f5c86e;
+  --color-secondary-foreground: #333333;
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  --color-muted: #ececf0;
+  --color-muted-foreground: #717182;
+
+  --color-accent: #e9ebef;
+  --color-accent-foreground: #030213;
+
+  --color-destructive: #d4183d;
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-input-background: #f3f3f5;
+
+  --radius: 0.625rem;
+  --font-size-base: 16px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* 🌙 dark mode 覆蓋 */
+.dark {
+  --color-background: #1a1a1a;
+  --color-foreground: #f5f5f5;
+
+  --color-primary: #f59e6e;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #f5c86e;
+  --color-secondary-foreground: #333333;
+
+  --color-muted: #444444;
+  --color-muted-foreground: #bbbbbb;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* 🔤 base reset */
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-size: var(--font-size-base);
   }
-  a:hover {
-    color: #747bff;
+
+  h1 {
+    font-family: "Times New Roman", serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-foreground);
   }
-  button {
-    background-color: #f9f9f9;
+
+  h2 {
+    font-family: "Times New Roman", serif;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-foreground);
+  }
+
+  h3 {
+    font-family: "Times New Roman", serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-foreground);
+  }
+
+  p {
+    font-family: system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-foreground);
+  }
+}
+
+/* 🔘 Button 元件 */
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors;
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+  .btn-primary:hover {
+    background-color: #e48856;
+  }
+
+  .btn-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-foreground);
+  }
+  .btn-secondary:hover {
+    background-color: #e5b856;
+  }
+
+  .btn-outline {
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    background-color: transparent;
+  }
+  .btn-outline:hover {
+    background-color: var(--color-muted);
   }
 }

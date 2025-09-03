@@ -1,6 +1,16 @@
-import { prisma } from "./prisma.js";
+// import { prisma } from "./prisma.js";
+import express from "express";
+import cors from "cors";
+import "dotenv/config";
+import products from "./routes/products.js";
+import orders from "./routes/orders.js";
 
-app.get("/test-db", async (req, res) => {
-  const products = await prisma.product.findMany();
-  res.json(products); // 空陣列 [] 也代表連線成功
-});
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.use("/api/products", products);
+app.use("/api/orders", orders);
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`API on http://localhost:${port}`));
