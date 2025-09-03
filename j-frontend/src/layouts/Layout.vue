@@ -9,11 +9,11 @@
     </main>
 
     <!-- Footer 共用 -->
-    <!-- <Footer /> -->
+    <Footer />
   </div>
 </template>
 
 <script setup>
 import Header from "../components/Header.vue"
-// import Footer from "@/components/Footer.vue" // 如果還沒做，可以暫時移除
+import Footer from "../components/Footer.vue"
 </script>

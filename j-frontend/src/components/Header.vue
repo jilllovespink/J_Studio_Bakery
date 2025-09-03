@@ -16,7 +16,7 @@
           v-for="link in navLinks"
           :key="link.to"
           :to="link.to"
-          class="relative text-foreground hover:text-primary transition-colors"
+          class="relative text-foreground hover:text-primary transition-colors font-semibold"
           active-class="text-primary"
         >
           {{ link.label }}

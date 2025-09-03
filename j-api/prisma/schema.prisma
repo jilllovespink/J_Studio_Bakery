@@ -7,153 +7,47 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//
-// 枚舉型別（讓欄位值更嚴謹）
-//
-enum ProductCategory {
-  ROOM_TEMP
-  CHILLED
-  FROZEN
-}
-
-enum OrderStatus {
-  PENDING
-  PAID
-  FAILED
-  CANCELLED
-}
-
-enum ShippingMethod {
-  BLACKCAT
-}
-
-enum PaymentMethod {
-  ECPAY_CREDIT
-}
-
-//
-// 商品與規格
-//
-model Product {
-  id          Int             @id @default(autoincrement())
-  name        String
-  slug        String          @unique
-  category    ProductCategory
-  description String?         @db.Text
-  heroImage   String?
-  status      Boolean         @default(true) // true = 上架, false = 下架
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-
-  // 關聯
-  variants  ProductVariant[]
-  OrderItem OrderItem[]
-
-  @@index([status, category])
-}
-
-model ProductVariant {
-  id          Int     @id @default(autoincrement())
-  productId   Int
-  variantName String
-  price       Decimal @db.Decimal(10, 2)
-  isDefault   Boolean @default(false)
-
-  // 關聯
-  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  OrderItem OrderItem[]
-
-  @@index([productId])
-  @@index([isDefault])
-}
-
-//
-// 訂單與訂單明細
-//
-model Order {
-  id             Int            @id @default(autoincrement())
-  orderNo        String         @unique
-  buyerName      String
-  email          String
-  phone          String
-  address        String
-  shippingMethod ShippingMethod
-  subtotal       Decimal        @db.Decimal(10, 2)
-  shippingFee    Decimal        @db.Decimal(10, 2)
-  discount       Decimal        @default(0) @db.Decimal(10, 2)
-  totalAmount    Decimal        @db.Decimal(10, 2)
-  status         OrderStatus    @default(PENDING)
-  paymentMethod  PaymentMethod  @default(ECPAY_CREDIT)
-  ecpayTradeNo   String?        @unique
-  paidAt         DateTime?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-
-  // 關聯
-  items OrderItem[]
-
-  @@index([status, createdAt])
-}
-
-model OrderItem {
-  id        Int     @id @default(autoincrement())
-  orderId   Int
-  productId Int
-  variantId Int?
-  qty       Int
-  unitPrice Decimal @db.Decimal(10, 2)
-  addOnJson Json?
-
-  // 關聯
-  order   Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
-  variant ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
-
-  @@index([orderId])
-  @@index([productId])
-  @@index([variantId])
-}
-
-//
-// 文章（部落格/SEO 用）
-//
-model Article {
+model article {
   id          Int       @id @default(autoincrement())
   title       String
-  slug        String    @unique
+  slug        String    @unique(map: "Article_slug_key")
   coverImage  String?
   excerpt     String?   @db.VarChar(500)
   content     String?   @db.LongText
   publishedAt DateTime?
   status      Boolean   @default(true)
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  updatedAt   DateTime
 
-  @@index([status, publishedAt])
+  @@index([status, publishedAt], map: "Article_status_publishedAt_idx")
 }
 
-//
-// 課程 & 課程報名意向
-//
-model Course {
-  id              Int       @id @default(autoincrement())
+model banners {
+  id         Int       @id @default(autoincrement())
+  image      String    @db.VarChar(255)
+  title      String    @db.VarChar(100)
+  buttonText String?   @db.VarChar(50)
+  buttonLink String?   @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model course {
+  id              Int            @id @default(autoincrement())
   title           String
-  slug            String    @unique
+  slug            String         @unique(map: "Course_slug_key")
   coverImage      String?
-  description     String?   @db.Text
-  price           Decimal   @db.Decimal(10, 2)
-  capacity        Int       @default(16)
-  status          Boolean   @default(true)
+  description     String?        @db.Text
+  price           Decimal        @db.Decimal(10, 2)
+  capacity        Int            @default(16)
+  status          Boolean        @default(true)
   startAt         DateTime?
   durationMinutes Int?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  // 關聯
-  intents CourseIntent[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime
+  courseintent    courseintent[]
 }
 
-model CourseIntent {
+model courseintent {
   id        Int      @id @default(autoincrement())
   courseId  Int
   name      String
@@ -161,9 +55,97 @@ model CourseIntent {
   phone     String
   message   String?  @db.VarChar(1000)
   createdAt DateTime @default(now())
+  course    course   @relation(fields: [courseId], references: [id], onDelete: Cascade, map: "CourseIntent_courseId_fkey")
 
-  // 關聯
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  @@index([courseId, createdAt], map: "CourseIntent_courseId_createdAt_idx")
+}
 
-  @@index([courseId, createdAt])
+model order {
+  id             Int                  @id @default(autoincrement())
+  orderNo        String               @unique(map: "Order_orderNo_key")
+  buyerName      String
+  email          String
+  phone          String
+  address        String
+  shippingMethod order_shippingMethod
+  subtotal       Decimal              @db.Decimal(10, 2)
+  shippingFee    Decimal              @db.Decimal(10, 2)
+  discount       Decimal              @default(0.00) @db.Decimal(10, 2)
+  totalAmount    Decimal              @db.Decimal(10, 2)
+  status         order_status         @default(PENDING)
+  paymentMethod  order_paymentMethod  @default(ECPAY_CREDIT)
+  ecpayTradeNo   String?              @unique(map: "Order_ecpayTradeNo_key")
+  paidAt         DateTime?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime
+  orderitem      orderitem[]
+
+  @@index([status, createdAt], map: "Order_status_createdAt_idx")
+}
+
+model orderitem {
+  id             Int             @id @default(autoincrement())
+  orderId        Int
+  productId      Int
+  variantId      Int?
+  qty            Int
+  unitPrice      Decimal         @db.Decimal(10, 2)
+  addOnJson      Json?
+  order          order           @relation(fields: [orderId], references: [id], onDelete: Cascade, map: "OrderItem_orderId_fkey")
+  product        product         @relation(fields: [productId], references: [id], map: "OrderItem_productId_fkey")
+  productvariant productvariant? @relation(fields: [variantId], references: [id], map: "OrderItem_variantId_fkey")
+
+  @@index([orderId], map: "OrderItem_orderId_idx")
+  @@index([productId], map: "OrderItem_productId_idx")
+  @@index([variantId], map: "OrderItem_variantId_idx")
+}
+
+model product {
+  id             Int              @id @default(autoincrement())
+  name           String
+  slug           String           @unique(map: "Product_slug_key")
+  category       product_category
+  description    String?          @db.Text
+  heroImage      String?
+  status         Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime
+  orderitem      orderitem[]
+  productvariant productvariant[]
+
+  @@index([status, category], map: "Product_status_category_idx")
+}
+
+model productvariant {
+  id          Int         @id @default(autoincrement())
+  productId   Int
+  variantName String
+  price       Decimal     @db.Decimal(10, 2)
+  isDefault   Boolean     @default(false)
+  orderitem   orderitem[]
+  product     product     @relation(fields: [productId], references: [id], onDelete: Cascade, map: "ProductVariant_productId_fkey")
+
+  @@index([isDefault], map: "ProductVariant_isDefault_idx")
+  @@index([productId], map: "ProductVariant_productId_idx")
+}
+
+enum product_category {
+  ROOM_TEMP
+  CHILLED
+  FROZEN
+}
+
+enum order_shippingMethod {
+  BLACKCAT
+}
+
+enum order_status {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+enum order_paymentMethod {
+  ECPAY_CREDIT
 }
