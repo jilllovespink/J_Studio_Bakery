@@ -85,13 +85,14 @@
 /* 🔘 Button 元件 */
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-colors;
+    @apply px-6 py-3 rounded-full font-bold text-white transition-colors;
   }
 
   .btn-primary {
     background-color: var(--color-primary);
     color: var(--color-primary-foreground);
   }
+
   .btn-primary:hover {
     background-color: #e48856;
   }
