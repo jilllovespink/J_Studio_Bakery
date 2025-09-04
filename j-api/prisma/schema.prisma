@@ -113,6 +113,7 @@ model product {
   updatedAt      DateTime
   orderitem      orderitem[]
   productvariant productvariant[]
+  isHot          Boolean          @default(false)
 
   @@index([status, category], map: "Product_status_category_idx")
 }

@@ -1,16 +1,15 @@
 <template>
-  <section class="relative w-full h-[80vh]">
+  <section class="relative w-full h-[65vh]">
     <Swiper
       v-if="banners.length > 0"
       :modules="[Autoplay, Pagination, Navigation]"
       :autoplay="{ delay: 5000, disableOnInteraction: false }"
       :loop="true"
-      pagination
-      navigation
+      :pagination="{ clickable: true }"
       class="w-full h-full"
     >
       <SwiperSlide v-for="banner in banners" :key="banner.id">
-        <div class="relative w-full h-[80vh]">
+        <div class="relative w-full h-[65vh]">
           <!-- 懶加載圖片 -->
           <LazyImage
             :src="banner.image"
@@ -70,3 +69,13 @@ onMounted(async () => {
   }
 });
 </script>
+
+<style scoped>
+:deep(.swiper-pagination-bullet) {
+  background-color: var(--color-muted); /* 預設灰色 */
+  opacity: 1;
+}
+:deep(.swiper-pagination-bullet-active) {
+  background-color: var(--color-primary);
+}
+</style>

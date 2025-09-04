@@ -1,6 +1,6 @@
 <template>
   <header class="w-full bg-white shadow sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
       <!-- Logo -->
       <router-link to="/" class="flex items-center gap-2">
         <img
