@@ -22,7 +22,7 @@
       <SwiperSlide v-for="item in hotProducts" :key="item.id">
         <div class="flex flex-col items-center">
           <div
-            class="w-40 h-40 rounded-full overflow-hidden shadow-lg hover:scale-105 transition"
+            class="w-50 h-50 rounded-full overflow-hidden shadow-lg hover:scale-105 transition"
           >
             <img
               :src="item.image"

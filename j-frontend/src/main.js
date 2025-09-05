@@ -5,6 +5,7 @@ import router from "./router";
 /* Font Awesome */
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
 
 /* Solid icons */
 import {
@@ -26,7 +27,8 @@ library.add(
   faMapMarkerAlt,
   faFacebookF,
   faInstagram,
-  faLine
+  faLine,
+  faClock
 );
 
 const app = createApp(App);
