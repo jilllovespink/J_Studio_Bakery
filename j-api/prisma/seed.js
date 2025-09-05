@@ -2,16 +2,19 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // 清空舊資料
-  await prisma.orderItem.deleteMany();
-  await prisma.order.deleteMany();
-  await prisma.productVariant.deleteMany();
+  console.log("Start seeding...");
+
+  console.log("Deleting old data...");
+  await prisma.orderItem?.deleteMany().catch(() => {});
+  await prisma.order?.deleteMany().catch(() => {});
+  await prisma.productVariant?.deleteMany().catch(() => {});
   await prisma.product.deleteMany();
   await prisma.article.deleteMany();
-  await prisma.courseIntent.deleteMany();
+  await prisma.courseIntent?.deleteMany().catch(() => {});
   await prisma.course.deleteMany();
+  await prisma.news.deleteMany();
 
-  // 商品 1：香草奶油蛋糕（冷藏）
+  console.log("Creating products...");
   await prisma.product.create({
     data: {
       name: "香草奶油蛋糕",
@@ -19,7 +22,7 @@ async function main() {
       category: "CHILLED",
       description: "手作香草奶油，口感綿密。",
       heroImage: "/images/products/vanilla.jpg",
-      variants: {
+      productvariant: {
         create: [
           { variantName: "8吋", price: 880, isDefault: true },
           { variantName: "12吋", price: 1280 },
@@ -28,7 +31,6 @@ async function main() {
     },
   });
 
-  // 商品 2：可可豆曲奇（常溫）
   await prisma.product.create({
     data: {
       name: "可可豆曲奇",
@@ -36,7 +38,7 @@ async function main() {
       category: "ROOM_TEMP",
       description: "入口即化，濃郁可可香。",
       heroImage: "/images/products/cookie.jpg",
-      variants: {
+      productvariant: {
         create: [
           { variantName: "小盒", price: 220, isDefault: true },
           { variantName: "大盒", price: 380 },
@@ -45,7 +47,6 @@ async function main() {
     },
   });
 
-  // 商品 3：檸檬磅蛋糕（常溫）
   await prisma.product.create({
     data: {
       name: "檸檬磅蛋糕",
@@ -53,7 +54,7 @@ async function main() {
       category: "ROOM_TEMP",
       description: "清爽檸檬香，濕潤扎實口感。",
       heroImage: "/images/products/lemon-pound.jpg",
-      variants: {
+      productvariant: {
         create: [
           { variantName: "單條", price: 320, isDefault: true },
           { variantName: "雙入禮盒", price: 600 },
@@ -62,7 +63,6 @@ async function main() {
     },
   });
 
-  // 商品 4：草莓鮮奶油蛋糕（冷藏/季節）
   await prisma.product.create({
     data: {
       name: "草莓鮮奶油蛋糕",
@@ -70,7 +70,7 @@ async function main() {
       category: "CHILLED",
       description: "當季草莓與輕盈鮮奶油，季節限定。",
       heroImage: "/images/products/strawberry.jpg",
-      variants: {
+      productvariant: {
         create: [
           { variantName: "6吋", price: 980, isDefault: true },
           { variantName: "8吋", price: 1380 },
@@ -79,7 +79,6 @@ async function main() {
     },
   });
 
-  // 商品 5：重乳酪蛋糕（冷凍）
   await prisma.product.create({
     data: {
       name: "重乳酪蛋糕",
@@ -87,7 +86,7 @@ async function main() {
       category: "FROZEN",
       description: "濃郁厚實，冷凍宅配風味不打折。",
       heroImage: "/images/products/cheesecake.jpg",
-      variants: {
+      productvariant: {
         create: [
           { variantName: "6吋", price: 680, isDefault: true },
           { variantName: "8吋", price: 980 },
@@ -96,7 +95,6 @@ async function main() {
     },
   });
 
-  // 商品 6：布朗尼禮盒（常溫）
   await prisma.product.create({
     data: {
       name: "布朗尼禮盒",
@@ -104,7 +102,7 @@ async function main() {
       category: "ROOM_TEMP",
       description: "微苦甜巧克力、酥軟口感，送禮自用皆宜。",
       heroImage: "/images/products/brownie.jpg",
-      variants: {
+      productvariant: {
         create: [
           { variantName: "6 入", price: 360, isDefault: true },
           { variantName: "12 入", price: 680 },
@@ -113,7 +111,7 @@ async function main() {
     },
   });
 
-  // 文章（展示用）
+  console.log("Creating article...");
   await prisma.article.create({
     data: {
       title: "居家打發的 3 個穩定技巧",
@@ -124,7 +122,7 @@ async function main() {
     },
   });
 
-  // 課程（展示 + 之後的意向表單）
+  console.log("Creating course...");
   await prisma.course.create({
     data: {
       title: "莓果鮮奶油蛋糕｜小班體驗",
@@ -137,7 +135,42 @@ async function main() {
     },
   });
 
-  console.log("Seed done ✓");
+  console.log("Creating news...");
+  await prisma.news.createMany({
+    data: [
+      {
+        title: "母親節蛋糕開始預購",
+        content:
+          "母親節即將來臨，為媽媽準備一份特別的驚喜吧！我們的限定蛋糕將於4月中開始預購，數量有限，敬請提前預定。",
+        date: new Date("2024-04-15"),
+        image: null,
+      },
+      {
+        title: "情人節送禮首選生巧克力禮盒",
+        content:
+          "香濃手工生巧克力，最適合在2月與心愛的人分享。限量禮盒，2月初正式開賣！",
+        date: new Date("2024-02-01"),
+        image: null,
+      },
+      {
+        title: "仲夏綠葡萄千層新上市！",
+        content:
+          "盛夏限定甜點—清爽的綠葡萄千層蛋糕，酸甜滋味絕對讓你難忘！3月起於全門市供應。",
+        date: new Date("2024-03-01"),
+        image: null,
+      },
+    ],
+  });
+
+  console.log("Seed completed successfully.");
 }
 
-main().finally(() => prisma.$disconnect());
+main()
+  .catch((e) => {
+    console.error("Seed failed with error:", e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+    console.log("Database connection closed.");
+  });

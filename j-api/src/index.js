@@ -5,6 +5,7 @@ import "dotenv/config";
 import products from "./routes/products.js";
 import orders from "./routes/orders.js";
 import banner from "./routes/banners.js";
+import newsRouter from "./routes/news.js";
 
 console.log("載入的 products router:", products);
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api", products);
 app.use("/api/orders", orders);
 app.use("/api/banners", banner);
+app.use("/api/news", newsRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API on http://localhost:${port}`));

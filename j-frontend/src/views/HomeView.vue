@@ -2,6 +2,7 @@
   <div>
     <!-- Hero 區塊 -->
     <HeroBanner />
+    <HotProducts />
   </div>
   <div class="p-6">
     <h1 class="text-2xl font-bold text-primary">首頁</h1>
@@ -10,4 +11,5 @@
 </template>
 <script setup>
 import HeroBanner from "../components/HomePage/HeroBanner.vue";
+import HotProducts from "../components/HomePage/HotProducts.vue";
 </script>
