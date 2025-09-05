@@ -1,73 +1,101 @@
-import { Router } from "express";
 import { prisma } from "../prisma.js";
+import express from "express";
 
-const r = Router();
+const r = express.Router();
 
-// GET /api/products?category=CHILLED&q=cake&page=1&limit=12
-r.get("/", async (req, res) => {
+console.log("Loaded products.js from:", import.meta.url);
+
+r.get("/products/hello", (req, res) => {
+  res.json({ msg: "hello products" });
+});
+
+// 熱門商品
+// GET /api/products/hot
+r.get("/products/hot", async (req, res) => {
   try {
-    // 1) 取出查詢參數（字串）並處理預設值/上限
+    const hotProducts = await prisma.product.findMany({
+      where: { isHot: true },
+      include: {
+        productvariant: { orderBy: { price: "asc" } },
+      },
+    });
+
+    const mapped = hotProducts.map((p) => ({
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      category: p.category,
+      heroImage: p.heroImage,
+      minPrice: p.productvariant[0]?.price
+        ? Number(p.productvariant[0].price)
+        : 0,
+    }));
+
+    console.log("Hot products:", mapped);
+    res.json(mapped);
+  } catch (err) {
+    console.error("Failed to fetch hot products:", err);
+    res.status(500).json({ error: "Failed to fetch hot products" });
+  }
+});
+
+// 商品清單（可帶查詢參數）
+// GET /api/products/list?category=CHILLED&search=cake&page=1&limit=12
+r.get("/products/list", async (req, res) => {
+  try {
     const { category, search, page = "1", limit = "12" } = req.query;
-    const take = Math.min(parseInt(limit, 10) || 12, 20); // 單頁最多給 20 筆
+    const take = Math.min(parseInt(limit, 10) || 12, 20);
     const skip = ((parseInt(page, 10) || 1) - 1) * take;
 
-    // 2) 組 Prisma 的 where 條件
-    //   - 先只取上架商品（status=true）
-    //   - category（若使用者有給）
-    //   - q（關鍵字，這裡用 contains；MySQL 多數預設是 case-insensitive）
     const where = { status: true };
     if (category) where.category = category;
-
     if (search) {
       where.OR = [
         { name: { contains: search } },
         { description: { contains: search } },
       ];
     }
-    // 3) 兩件事一起做：取清單 + 取總數（for 分頁）
+
     const [items, total] = await Promise.all([
       prisma.product.findMany({
         where,
-        include: {
-          // 取規格並按價格由低到高排，等下好抓「最小價格」
-          variants: { orderBy: { price: "asc" } },
-        },
-        orderBy: { createdAt: "desc" }, // 新的在前
+        include: { productvariant: { orderBy: { price: "asc" } } },
+        orderBy: { createdAt: "desc" },
         skip,
         take,
       }),
       prisma.product.count({ where }),
     ]);
 
-    // 4) 整理回應：Decimal 轉 Number，補 minPrice
     const mapped = items.map((p) => ({
       id: p.id,
       name: p.name,
       slug: p.slug,
       category: p.category,
       heroImage: p.heroImage,
-      minPrice: p.variants[0]?.price ? Number(p.variants[0].price) : 0,
+      minPrice: p.productvariant[0]?.price
+        ? Number(p.productvariant[0].price)
+        : 0,
     }));
 
-    // 5) 回傳統一格式（含分頁資訊）
     res.json({ items: mapped, page: Number(page) || 1, limit: take, total });
   } catch (err) {
-    console.error(err);
+    console.error("Failed to fetch products:", err);
     res
       .status(500)
       .json({ error: { code: "INTERNAL_ERROR", message: "Server error" } });
   }
 });
-// GET /api/products/:slug → 單一商品詳情
-r.get("/:slug", async (req, res) => {
+
+// 單一商品詳情
+// GET /api/products/detail/:slug
+r.get("/products/detail/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
 
     const product = await prisma.product.findUnique({
       where: { slug },
-      include: {
-        variants: { orderBy: { price: "asc" } },
-      },
+      include: { productvariant: { orderBy: { price: "asc" } } },
     });
 
     if (!product) {
@@ -76,7 +104,6 @@ r.get("/:slug", async (req, res) => {
         .json({ error: { code: "NOT_FOUND", message: "Product not found" } });
     }
 
-    // 整理回傳格式
     res.json({
       id: product.id,
       name: product.name,
@@ -84,7 +111,7 @@ r.get("/:slug", async (req, res) => {
       category: product.category,
       description: product.description,
       heroImage: product.heroImage,
-      variants: product.variants.map((v) => ({
+      productvariants: product.productvariant.map((v) => ({
         id: v.id,
         variantName: v.variantName,
         price: Number(v.price),
@@ -92,7 +119,7 @@ r.get("/:slug", async (req, res) => {
       })),
     });
   } catch (err) {
-    console.error(err);
+    console.error("Failed to fetch product detail:", err);
     res
       .status(500)
       .json({ error: { code: "INTERNAL_ERROR", message: "Server error" } });
