@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", products);
+app.use("/api/products", products);
 app.use("/api/orders", orders);
 app.use("/api/banners", banner);
 app.use("/api/news", newsRouter);

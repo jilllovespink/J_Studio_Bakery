@@ -20,18 +20,7 @@
       class="max-w-7xl mx-auto overflow-visible"
     >
       <SwiperSlide v-for="item in hotProducts" :key="item.id">
-        <div class="flex flex-col items-center">
-          <div
-            class="w-50 h-50 rounded-full overflow-hidden shadow-lg hover:scale-105 transition"
-          >
-            <img
-              :src="item.image"
-              :alt="item.name"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <p class="mt-3 text-foreground">{{ item.name }}</p>
-        </div>
+        <ProductCard :product="item" />
       </SwiperSlide>
     </Swiper>
 
@@ -48,7 +37,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-
+import ProductCard from "../ProductCard.vue";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const hotProducts = ref([]);

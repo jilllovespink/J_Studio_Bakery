@@ -17,7 +17,7 @@
           :key="link.to"
           :to="link.to"
           class="relative text-foreground hover:text-primary transition-colors font-semibold"
-          active-class="text-primary"
+          exact-active-class="text-primary"
         >
           {{ link.label }}
           <!-- active underline -->

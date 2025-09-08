@@ -5,13 +5,9 @@ const r = express.Router();
 
 console.log("Loaded products.js from:", import.meta.url);
 
-r.get("/products/hello", (req, res) => {
-  res.json({ msg: "hello products" });
-});
-
 // 熱門商品
 // GET /api/products/hot
-r.get("/products/hot", async (req, res) => {
+r.get("/hot", async (req, res) => {
   try {
     const hotProducts = await prisma.product.findMany({
       where: { isHot: true },
@@ -41,7 +37,7 @@ r.get("/products/hot", async (req, res) => {
 
 // 商品清單（可帶查詢參數）
 // GET /api/products/list?category=CHILLED&search=cake&page=1&limit=12
-r.get("/products/list", async (req, res) => {
+r.get("/list", async (req, res) => {
   try {
     const { category, search, page = "1", limit = "12" } = req.query;
     const take = Math.min(parseInt(limit, 10) || 12, 20);
@@ -89,7 +85,7 @@ r.get("/products/list", async (req, res) => {
 
 // 單一商品詳情
 // GET /api/products/detail/:slug
-r.get("/products/detail/:slug", async (req, res) => {
+r.get("/detail/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
 
