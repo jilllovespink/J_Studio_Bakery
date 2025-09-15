@@ -102,21 +102,54 @@ model orderitem {
 }
 
 model product {
-  id             Int              @id @default(autoincrement())
+  id             Int                  @id @default(autoincrement())
   name           String
-  slug           String           @unique(map: "Product_slug_key")
-  category       product_category
-  description    String?          @db.Text
+  slug           String               @unique(map: "Product_slug_key")
+  category       product_category     @relation(fields: [categoryId], references: [id])
+  categoryId     Int
+  subcategory    product_subcategory? @relation(fields: [subcategoryId], references: [id])
+  subcategoryId  Int?
+
+  description    String?              @db.Text
   heroImage      String?
-  status         Boolean          @default(true)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  status         Boolean              @default(true)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
   orderitem      orderitem[]
   productvariant productvariant[]
-  isHot          Boolean          @default(false)
+  isHot          Boolean              @default(false)
 
-  @@index([status, category], map: "Product_status_category_idx")
+  @@index([status, categoryId], map: "Product_status_category_idx")
 }
+
+model product_category {
+  id          Int                 @id @default(autoincrement())
+  name        String              @unique                // 大分類名稱 (例: 經典蛋糕)
+  slug        String              @unique                // 路由用 (classic-cakes)
+  description String?             @db.Text               // 顯示在 banner 的文字
+  orderIndex  Int?                                       // 排序用
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  // Relation
+  products    product[]           // 一個大分類底下有很多產品
+  subcategories product_subcategory[]
+}
+
+model product_subcategory {
+  id          Int              @id @default(autoincrement())
+  category    product_category @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  name        String
+  slug        String           @unique     // 用來當錨點 scroll 的定位
+  orderIndex  Int?                          // 排序用
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relation
+  products    product[]
+}
+
 
 model productvariant {
   id          Int         @id @default(autoincrement())
@@ -135,15 +168,9 @@ model news {
   id        Int      @id @default(autoincrement())
   title     String
   content   String
-  image     String?   @db.VarChar(255)
+  image     String?  @db.VarChar(255)
   date      DateTime
   createdAt DateTime @default(now())
-}
-
-enum product_category {
-  ROOM_TEMP
-  CHILLED
-  FROZEN
 }
 
 enum order_shippingMethod {
@@ -165,3 +192,5 @@ enum banners_fontColor {
   light
   dark
 }
+
+
