@@ -107,6 +107,9 @@ r.get("/detail/:slug", async (req, res) => {
       category: product.category,
       description: product.description,
       heroImage: product.heroImage,
+      ingredients: product.ingredients,
+      shelfLife: product.shelfLife,
+      flavorProfile: product.flavorProfile,
       productvariants: product.productvariant.map((v) => ({
         id: v.id,
         variantName: v.variantName,

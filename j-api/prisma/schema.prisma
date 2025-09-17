@@ -118,6 +118,9 @@ model product {
   orderitem      orderitem[]
   productvariant productvariant[]
   isHot          Boolean              @default(false)
+  ingredients    String?
+  shelfLife      String?
+  flavorProfile  String?
 
   @@index([status, categoryId], map: "Product_status_category_idx")
 }

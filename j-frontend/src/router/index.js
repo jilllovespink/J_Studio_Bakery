@@ -5,7 +5,7 @@ import HomeView from "../views/HomeView.vue";
 // import AboutView from "@/views/AboutView.vue";
 import ProductsView from "../views/ProductsView.vue";
 
-// import ProductDetailView from "@/views/ProductDetailView.vue";
+import ProductDetailView from "../views/ProductDetailView.vue";
 // import ArticlesView from "@/views/ArticlesView.vue";
 
 const routes = [
@@ -19,6 +19,11 @@ const routes = [
         path: "products/:categorySlug",
         name: "product",
         component: ProductsView,
+      },
+      {
+        path: "products/detail/:slug",
+        name: "productDetail",
+        component: ProductDetailView,
       },
       {
         path: "/products",

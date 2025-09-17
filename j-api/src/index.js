@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import products from "./routes/products.js";
+import allproducts from "./routes/allproducts.js";
 import orders from "./routes/orders.js";
 import banner from "./routes/banners.js";
 import newsRouter from "./routes/news.js";
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/products", products);
+app.use("/api/allproducts", allproducts);
 app.use("/api/orders", orders);
 app.use("/api/banners", banner);
 app.use("/api/news", newsRouter);

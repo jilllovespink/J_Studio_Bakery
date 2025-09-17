@@ -13,7 +13,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
-  src: { type: String, required: true },
+  src: { type: String, default: "" },
   alt: { type: String, default: "" },
   placeholder: {
     type: String,

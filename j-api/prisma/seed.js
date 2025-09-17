@@ -118,6 +118,10 @@ async function main() {
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
       isHot: true,
+      ingredients: "低筋麵粉、新鮮雞蛋、無鹽奶油、鮮奶油、天然香草莢、細砂糖",
+      shelfLife: "常溫下1天，冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "以新鮮雞蛋與天然香草莢製作的香草奶油蛋糕，蛋糕體細緻綿密，搭配濃郁卻輕盈的鮮奶油，甜度適中，入口帶有淡淡香草芳香。整體層次柔和而優雅，無論日常聚會或慶祝場合都相當適合。",
       productvariant: {
         create: [
           { variantName: "8吋", price: 880, isDefault: true },
@@ -127,6 +131,7 @@ async function main() {
     },
   });
 
+  // 草莓鮮奶油蛋糕
   await prisma.product.create({
     data: {
       name: "草莓鮮奶油蛋糕",
@@ -136,6 +141,10 @@ async function main() {
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
       isHot: true,
+      ingredients: "低筋麵粉、新鮮雞蛋、鮮奶油、砂糖、當季草莓",
+      shelfLife: "冷藏保存2天，冷凍保存5天",
+      flavorProfile:
+        "嚴選當季草莓搭配輕盈細緻的奶油，蛋糕體鬆軟濕潤，每一口都能感受到草莓的酸甜與奶香的柔和交織。甜度控制恰到好處，口感清爽不膩，是最受歡迎的季節限定款。",
       productvariant: {
         create: [
           { variantName: "6吋", price: 980, isDefault: true },
@@ -145,7 +154,7 @@ async function main() {
     },
   });
 
-  // 生巧克力蛋糕
+  // 重乳酪蛋糕
   await prisma.product.create({
     data: {
       name: "重乳酪蛋糕",
@@ -155,6 +164,10 @@ async function main() {
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
       isHot: false,
+      ingredients: "奶油乳酪、雞蛋、鮮奶油、砂糖、餅乾底",
+      shelfLife: "冷藏保存3天，冷凍保存10天",
+      flavorProfile:
+        "使用進口奶油乳酪與鮮奶油製作，口感濃郁厚實，伴隨乳酪自然的微酸與奶香。餅乾底增添酥脆層次，冷藏時綿密滑順，冷凍後更像冰淇淋般的細膩風味，適合各種甜點愛好者。",
       productvariant: {
         create: [
           { variantName: "6吋", price: 680, isDefault: true },
@@ -164,7 +177,7 @@ async function main() {
     },
   });
 
-  // 法式開心果蛋糕
+  // 開心果覆盆子蛋糕
   await prisma.product.create({
     data: {
       name: "開心果覆盆子蛋糕",
@@ -174,13 +187,17 @@ async function main() {
       categoryId: classicCakes.id,
       subcategoryId: subPistachioCakes?.id ?? null,
       isHot: false,
+      ingredients: "低筋麵粉、開心果粉、新鮮雞蛋、鮮奶油、覆盆子、砂糖",
+      shelfLife: "冷藏保存2天，冷凍保存7天",
+      flavorProfile:
+        "以開心果粉製作的蛋糕體帶有堅果香氣，搭配新鮮覆盆子內餡，酸甜平衡。奶油層柔滑輕盈，讓堅果與莓果的風味互相襯托，呈現法式甜點的優雅層次。",
       productvariant: {
         create: [{ variantName: "6吋", price: 1080, isDefault: true }],
       },
     },
   });
 
-  // 芋泥蛋糕
+  // 芋泥鮮奶蛋糕
   await prisma.product.create({
     data: {
       name: "芋泥鮮奶蛋糕",
@@ -190,13 +207,17 @@ async function main() {
       categoryId: classicCakes.id,
       subcategoryId: subTaroCakes?.id ?? null,
       isHot: false,
+      ingredients: "芋頭泥、低筋麵粉、鮮奶油、雞蛋、砂糖",
+      shelfLife: "冷藏保存2天，冷凍保存5天",
+      flavorProfile:
+        "嚴選芋頭蒸煮打泥製成綿密內餡，香氣濃郁卻不顯厚重。蛋糕體柔軟，鮮奶油與芋泥的比例恰到好處，整體甜而不膩，帶來舒適自然的口感，是經典的人氣款。",
       productvariant: {
         create: [{ variantName: "8吋", price: 980, isDefault: true }],
       },
     },
   });
 
-  // 餅乾系列
+  // 軟心巧克力餅乾
   await prisma.product.create({
     data: {
       name: "軟心巧克力餅乾",
@@ -206,12 +227,17 @@ async function main() {
       categoryId: handmadeCookies.id,
       subcategoryId: subSoftCookies?.id ?? null,
       isHot: false,
+      ingredients: "中筋麵粉、無鹽奶油、砂糖、雞蛋、黑巧克力豆",
+      shelfLife: "常溫下3天，冷藏保存7天",
+      flavorProfile:
+        "美式經典軟餅乾，外層微酥、中心柔軟，混合大量黑巧克力豆，每一口都充滿濃郁可可風味。甜度偏濃，但配上牛奶或黑咖啡更能展現迷人的口感。",
       productvariant: {
         create: [{ variantName: "4入", price: 160, isDefault: true }],
       },
     },
   });
 
+  // 可可豆曲奇
   await prisma.product.create({
     data: {
       name: "可可豆曲奇",
@@ -221,6 +247,10 @@ async function main() {
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
       isHot: true,
+      ingredients: "低筋麵粉、可可粉、無鹽奶油、砂糖、雞蛋",
+      shelfLife: "常溫下7天，冷藏保存14天",
+      flavorProfile:
+        "採用高純度可可粉製作，入口即化，帶有濃郁巧克力香氣。質地細緻，口感輕盈不膩，特別適合喜愛可可風味的甜點愛好者，是茶點與伴手禮的首選。",
       productvariant: {
         create: [
           { variantName: "小盒", price: 220, isDefault: true },
@@ -230,6 +260,7 @@ async function main() {
     },
   });
 
+  // 香草雪球餅乾
   await prisma.product.create({
     data: {
       name: "香草雪球餅乾",
@@ -239,13 +270,17 @@ async function main() {
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
       isHot: false,
+      ingredients: "低筋麵粉、無鹽奶油、糖粉、香草粉",
+      shelfLife: "常溫下5天，冷藏保存10天",
+      flavorProfile:
+        "圓潤小巧的雪球餅乾，外層裹上細緻糖粉，入口即化，帶有淡淡的香草芳香。甜度溫和，口感酥鬆輕盈，是搭配茶飲或咖啡的理想小點心。",
       productvariant: {
         create: [{ variantName: "12入", price: 280, isDefault: true }],
       },
     },
   });
 
-  // 生乳捲系列
+  // 仲夏芒果生乳捲
   await prisma.product.create({
     data: {
       name: "仲夏芒果生乳捲",
@@ -255,12 +290,17 @@ async function main() {
       categoryId: chilledRolls.id,
       subcategoryId: subSeasonalRolls?.id ?? null,
       isHot: false,
+      ingredients: "雞蛋、低筋麵粉、砂糖、鮮奶油、芒果",
+      shelfLife: "冷藏保存2天",
+      flavorProfile:
+        "柔軟細膩的蛋糕體捲入當季芒果果肉與輕盈奶油，口感香甜多汁。芒果的熱帶果香與鮮奶油的細緻融合，清爽不膩，是夏季最受歡迎的限定款甜點。",
       productvariant: {
         create: [{ variantName: "1條", price: 480, isDefault: true }],
       },
     },
   });
 
+  // 北海道生乳捲
   await prisma.product.create({
     data: {
       name: "北海道生乳捲",
@@ -270,6 +310,10 @@ async function main() {
       categoryId: chilledRolls.id,
       subcategoryId: subHokkaidoRolls?.id ?? null,
       isHot: false,
+      ingredients: "雞蛋、低筋麵粉、砂糖、北海道十勝鮮奶油",
+      shelfLife: "冷藏保存3天",
+      flavorProfile:
+        "以北海道十勝生乳製作的鮮奶油，質地柔滑細緻，蛋糕體輕盈鬆軟，入口即化。奶香純淨自然，甜度清爽，是展現牛乳本味的經典款生乳捲。",
       productvariant: {
         create: [{ variantName: "1條", price: 520, isDefault: true }],
       },

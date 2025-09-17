@@ -110,7 +110,6 @@ const categories = ref([]);
 const activeCategory = ref(null);
 const activeSubcategories = ref([]);
 const productsBySub = ref({});
-const expandedCategory = ref(null); // 手機版展開追蹤
 
 // 抓分類 + 子分類
 const fetchCategories = async () => {
