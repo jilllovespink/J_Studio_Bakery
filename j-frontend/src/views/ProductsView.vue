@@ -1,11 +1,12 @@
 <template>
   <div class="flex flex-col md:flex-row bg-background">
-    <!-- Sidebar 左邊 25% -->
+    <!-- Sidebar 左邊 20% -->
     <aside
-      class="w-full md:w-1/4 p-4 md:p-6 border-b md:border-b-0 md:border-r border-[var(--color-border)]
+      class="w-full md:w-1/5 p-4 md:p-6 border-b md:border-b-0 md:border-r border-[var(--color-border)]
              md:sticky md:top-0 md:h-screen md:overflow-y-auto"
     >
-      <h1 class="text-2xl font-bold mb-4 md:mb-6">甜點系列</h1>
+      <h1 class="text-2xl font-bold mb-2 md:mb-4">甜點系列</h1>
+      <div class="w-24 h-1 bg-primary rounded mb-6 md:mb-4"></div>
 
       <!-- 桌面版直向列表 / 手機版橫向捲動 -->
       <ul
@@ -16,59 +17,42 @@
           :key="cat.id"
           class="flex-shrink-0 md:flex-shrink w-auto"
         >
-          <!-- 點擊大分類 -->
-          <div class="flex items-center justify-between">
-            <RouterLink
-              :to="`/products/${cat.slug}`"
-              class="block font-bold text-base md:text-lg px-3 py-2 rounded-lg transition-colors"
-              :class="{
+          <!-- 大分類 -->
+          <RouterLink
+            :to="`/products/${cat.slug}`"
+            class="block font-bold text-base md:text-lg px-3 py-2 rounded-lg transition-colors"
+            :class="{
                 'bg-primary text-primary-foreground':
                   activeCategory?.slug === cat.slug,
                 'hover:text-primary': activeCategory?.slug !== cat.slug,
               }"
-              @click="toggleCategory(cat.id)"
-            >
-              {{ cat.name }}
-            </RouterLink>
-
-            <!-- 手機版：展開箭頭 -->
-            <button
-              class="md:hidden ml-2 text-sm text-muted-foreground"
-              @click="toggleCategory(cat.id)"
-            >
-              <span v-if="expandedCategory === cat.id">▲</span>
-              <span v-else>▼</span>
-            </button>
-          </div>
+          >
+            {{ cat.name }}
+          </RouterLink>
 
           <!-- 子分類 -->
-          <transition name="fade">
-            <ul
-              v-if="isCategoryExpanded(cat.id)"
-              class="ml-4 mt-2 space-y-1 md:block"
-            >
-              <li v-for="sub in cat.subcategories" :key="sub.id">
-                <RouterLink
-                  :to="{ path: `/products/${cat.slug}`, hash: `#${sub.slug}` }"
-                  class="block text-sm px-2 py-1 rounded-md transition-colors"
-                  :class="{
+          <ul class="ml-4 mt-2 space-y-1 hidden md:block">
+            <li v-for="sub in cat.subcategories" :key="sub.id">
+              <RouterLink
+                :to="{ path: `/products/${cat.slug}`, hash: `#${sub.slug}` }"
+                class="block text-sm px-2 py-1 rounded-md transition-colors"
+                :class="{
                     'text-primary font-semibold':
                       route.hash === `#${sub.slug}`,
                     'text-muted-foreground hover:text-primary':
                       route.hash !== `#${sub.slug}`,
                   }"
-                >
-                  {{ sub.name }}
-                </RouterLink>
-              </li>
-            </ul>
-          </transition>
+              >
+                {{ sub.name }}
+              </RouterLink>
+            </li>
+          </ul>
         </li>
       </ul>
     </aside>
 
-    <!-- 右邊內容 75% -->
-    <main class="w-full md:w-3/4 p-4 md:p-6">
+    <!-- 右邊內容 80% -->
+    <main class="w-full md:w-4/5 p-4 md:p-6">
       <!-- Banner -->
       <div
         v-if="activeCategory"
@@ -99,13 +83,15 @@
           <div class="flex-1 border-t border-[var(--color-border)]"></div>
         </div>
 
-        <!-- 商品卡片 -->
+        <!-- 商品卡片：1/2/3 欄 -->
         <div
-          v-for="p in productsBySub[sub.id]"
-          :key="p.id"
-          class="bg-white rounded-full shadow flex flex-col items-center p-6"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
-          <ProductCard :product="p" />
+          <ProductCard
+            v-for="p in productsBySub[sub.id]"
+            :key="p.id"
+            :product="p"
+          />
         </div>
       </div>
     </main>
@@ -125,15 +111,6 @@ const activeCategory = ref(null);
 const activeSubcategories = ref([]);
 const productsBySub = ref({});
 const expandedCategory = ref(null); // 手機版展開追蹤
-
-const toggleCategory = (id) => {
-  expandedCategory.value = expandedCategory.value === id ? null : id;
-};
-
-const isCategoryExpanded = (id) => {
-  return expandedCategory.value === id || window.innerWidth >= 768; // 桌面永遠展開
-};
-
 
 // 抓分類 + 子分類
 const fetchCategories = async () => {
