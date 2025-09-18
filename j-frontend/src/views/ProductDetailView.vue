@@ -12,15 +12,22 @@
       v-if="product.heroImage"
       :src="product.heroImage"
       :alt="product.name"
+      class="w-full h-auto rounded-lg"
     />
 
     <!-- 右側商品資訊 -->
-    <div>
+    <div class="flex flex-col">
       <h1 class="text-3xl font-bold mb-2">{{ product.name }}</h1>
       <p class="text-muted-foreground mb-4">{{ product.description }}</p>
+      <p v-if="product.flavorProfile" class="text-base text-foreground mb-6">
+        {{ product.flavorProfile }}
+      </p>
 
       <!-- 規格選擇 -->
-      <div v-if="product.productvariants?.length > 1" class="mb-4 flex gap-3">
+      <div
+        v-if="product.productvariants?.length > 1"
+        class="mb-4 flex flex-wrap gap-2 md:gap-3"
+      >
         <button
           v-for="variant in product.productvariants"
           :key="variant.id"
@@ -40,7 +47,7 @@
       </p>
 
       <!-- 數量 + 購物車 -->
-      <div class="flex items-center gap-3 mb-6">
+      <div class="flex flex-wrap items-center gap-3 mb-6">
         <button class="btn-outline rounded-full w-10 h-10" @click="decreaseQty">
           -
         </button>
@@ -49,60 +56,59 @@
           +
         </button>
 
-        <button class="btn btn-primary ml-6">加入購物車</button>
-        <button class="btn btn-secondary">立即購買</button>
-      </div>
-
-      <!-- 注意事項 -->
-      <div class="bg-accent p-4 rounded mb-6 text-sm text-muted-foreground">
-        產品出貨後除非產品本身重大瑕疵，概不接受退換貨，且不適用七日鑑賞期。
+        <div class="flex gap-2 mt-3 md:mt-0">
+          <button class="btn btn-primary ml-6">加入購物車</button>
+          <button class="btn btn-secondary">立即購買</button>
+        </div>
       </div>
 
       <!-- 展開收合資訊 -->
-      <div class="divide-y border rounded">
-        <details class="p-4">
-          <summary class="font-semibold cursor-pointer">製造成份</summary>
-          <p class="mt-2">{{ product.ingredients }}</p>
+      <div class="mt-6">
+        <details
+          v-for="(section, idx) in detailSections"
+          :key="idx"
+          class="py-4 border-b border-[var(--color-border)] group"
+        >
+          <summary
+            class="flex justify-between items-center font-semibold cursor-pointer list-none"
+          >
+            {{ section.title }}
+            <span class="text-destructive text-lg">
+              <span class="group-open:hidden">+</span>
+              <span class="hidden group-open:inline">–</span>
+            </span>
+          </summary>
+          <p class="mt-2 text-sm text-muted-foreground">
+            {{ section.content }}
+          </p>
         </details>
-        <details class="p-4">
-          <summary class="font-semibold cursor-pointer">保存期限</summary>
-          <p class="mt-2">{{ product.shelfLife }}</p>
-        </details>
-        <details class="p-4">
-          <summary class="font-semibold cursor-pointer">產品風味</summary>
-          <p class="mt-2">{{ product.flavorProfile }}</p>
-        </details>
-        <details class="p-4">
-          <summary class="font-semibold cursor-pointer">宅配說明</summary>
-          <p class="mt-2">本產品可宅配全台，部分偏遠地區運送時間可能延長。</p>
-        </details>
+      </div>
+
+      <!-- 注意事項 -->
+      <div
+        class="bg-accent p-4 rounded mb-6  mt-8 text-sm text-muted-foreground"
+      >
+        產品出貨後除非產品本身重大瑕疵，概不接受退換貨，且不適用七日鑑賞期。
       </div>
     </div>
   </div>
 
   <!-- 你可能也會喜歡 -->
   <div class="max-w-7xl mx-auto px-4 py-12">
-    <h2 class="text-2xl font-bold mb-6">你可能也會喜歡</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <div
+    <div class="flex items-center mb-6">
+      <div class="flex-1 border-t border-[var(--color-border)]"></div>
+      <h2 class="mx-3 md:mx-4 text-lg md:text-xl font-semibold">
+        你可能也會喜歡
+      </h2>
+      <div class="flex-1 border-t border-[var(--color-border)]"></div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+      <ProductCard
         v-for="item in recommendations"
         :key="item.id"
-        class="border rounded-lg p-4 shadow hover:shadow-lg transition"
-      >
-        <img
-          :src="item.heroImage"
-          :alt="item.name"
-          class="w-full h-48 object-cover rounded mb-3"
-          loading="lazy"
-        />
-        <h3 class="text-lg font-semibold">{{ item.name }}</h3>
-        <p class="text-sm text-muted-foreground mb-2">
-          {{ item.description }}
-        </p>
-        <p class="font-bold">
-          NT$ {{ item.productvariants?.[0]?.price ?? "—" }}
-        </p>
-      </div>
+        :product="item"
+      />
     </div>
   </div>
 </template>
@@ -111,6 +117,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import ImageZoom from "../components/ImageZoom.vue";
+import ProductCard from "../components/ProductCard.vue";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const route = useRoute();
@@ -120,6 +127,7 @@ const product = ref({});
 const selectedVariant = ref(null);
 const quantity = ref(1);
 const recommendations = ref([]);
+const detailSections = ref([]);
 
 onMounted(async () => {
   // 單品
@@ -133,6 +141,14 @@ onMounted(async () => {
       product.value.productvariants[0];
   }
 
+  detailSections.value = [
+    { title: "製造成份", content: product.value.ingredients },
+    { title: "保存期限", content: product.value.shelfLife },
+    {
+      title: "宅配說明",
+      content: "本產品可宅配全台，部分偏遠地區運送時間可能延長。",
+    },
+  ];
 
   // 隨機推薦三個
  const allRes = await fetch(`${API_URL}/api/allproducts`);
