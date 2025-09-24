@@ -6,7 +6,7 @@ import HomeView from "../views/HomeView.vue";
 import ProductsView from "../views/ProductsView.vue";
 
 import ProductDetailView from "../views/ProductDetailView.vue";
-// import ArticlesView from "@/views/ArticlesView.vue";
+import ArticlesView from "../views/ArticlesView.vue";
 
 const routes = [
   {
@@ -29,7 +29,7 @@ const routes = [
         path: "/products",
         redirect: "/products/top10",
       },
-      //   { path: "articles", name: "articles", component: ArticlesView },
+      { path: "articles", name: "articles", component: ArticlesView },
     ],
   },
 ];

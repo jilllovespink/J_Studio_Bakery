@@ -7,19 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model article {
-  id          Int       @id @default(autoincrement())
-  title       String
-  slug        String    @unique(map: "Article_slug_key")
-  coverImage  String?
-  excerpt     String?   @db.VarChar(500)
-  content     String?   @db.LongText
-  publishedAt DateTime?
-  status      Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
 
-  @@index([status, publishedAt], map: "Article_status_publishedAt_idx")
+model ArticleCategory {
+  id        Int                 @id @default(autoincrement())
+  name      String
+  slug      String              @unique
+  orderIndex Int
+  subcategories ArticleSubCategory[]
+  articles  Article[]
+}
+
+model ArticleSubCategory {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  orderIndex  Int
+  categoryId  Int
+  category    ArticleCategory @relation(fields: [categoryId], references: [id])
+  articles    Article[]
+}
+
+model Article {
+  id            Int      @id @default(autoincrement())
+  title         String
+  slug          String   @unique
+  excerpt       String
+  content       String
+  coverImageUrl String?
+  publishedAt   DateTime @default(now())
+  categoryId    Int
+  subCategoryId Int
+  category      ArticleCategory @relation(fields: [categoryId], references: [id])
+  subcategory   ArticleSubCategory @relation(fields: [subCategoryId], references: [id])
 }
 
 model banners {
@@ -111,7 +130,7 @@ model product {
   subcategoryId  Int?
 
   description    String?              @db.Text
-  heroImage      String?
+  heroImage      String?              @db.VarChar(10000)
   status         Boolean              @default(true)
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt

@@ -16,6 +16,231 @@ async function main() {
   await prisma.courseIntent?.deleteMany().catch(() => {});
   await prisma.course.deleteMany();
   await prisma.news.deleteMany();
+  await prisma.articleSubCategory?.deleteMany().catch(() => {});
+  await prisma.articleCategory?.deleteMany().catch(() => {});
+
+  // 建立文章大分類與子分類
+  console.log("Creating article categories & subcategories...");
+  const juansRecipes = await prisma.articleCategory.create({
+    data: {
+      name: "娟姐獨家食譜",
+      slug: "juans-recipes",
+      orderIndex: 1,
+      subcategories: {
+        create: [
+          { name: "蛋糕食譜", slug: "cake-recipes", orderIndex: 1 },
+          { name: "餅乾食譜", slug: "cookie-recipes", orderIndex: 2 },
+          { name: "鹹點食譜", slug: "savory-recipes", orderIndex: 3 },
+        ],
+      },
+    },
+    include: { subcategories: true },
+  });
+
+  const bakingSkills = await prisma.articleCategory.create({
+    data: {
+      name: "烘焙實作技巧",
+      slug: "baking-skills",
+      orderIndex: 2,
+      subcategories: {
+        create: [
+          { name: "蛋糕造型技巧", slug: "cake-decoration", orderIndex: 1 },
+          { name: "餅乾塑形技巧", slug: "cookie-shaping", orderIndex: 2 },
+          { name: "調味技巧", slug: "flavoring-skills", orderIndex: 3 },
+        ],
+      },
+    },
+    include: { subcategories: true },
+  });
+
+  const ingredientsCompare = await prisma.articleCategory.create({
+    data: {
+      name: "食材比一比",
+      slug: "ingredients-compare",
+      orderIndex: 3,
+      subcategories: {
+        create: [
+          { name: "食材挑選", slug: "ingredient-selection", orderIndex: 1 },
+          { name: "食材保存", slug: "ingredient-storage", orderIndex: 2 },
+        ],
+      },
+    },
+    include: { subcategories: true },
+  });
+
+  const bakingTools = await prisma.articleCategory.create({
+    data: {
+      name: "烘焙器材選擇",
+      slug: "baking-tools",
+      orderIndex: 4,
+      subcategories: {
+        create: [
+          { name: "烘焙電器挑選", slug: "appliance-selection", orderIndex: 1 },
+          { name: "計量器具挑選", slug: "measuring-tools", orderIndex: 2 },
+          { name: "包裝材料挑選", slug: "packaging-selection", orderIndex: 3 },
+        ],
+      },
+    },
+    include: { subcategories: true },
+  });
+
+  // 取出子分類
+  const subCakeRecipes = juansRecipes.subcategories.find(
+    (s) => s.slug === "cake-recipes"
+  );
+  const subCookieRecipes = juansRecipes.subcategories.find(
+    (s) => s.slug === "cookie-recipes"
+  );
+  const subSavoryRecipes = juansRecipes.subcategories.find(
+    (s) => s.slug === "savory-recipes"
+  );
+
+  const subCakeDecoration = bakingSkills.subcategories.find(
+    (s) => s.slug === "cake-decoration"
+  );
+  const subCookieShaping = bakingSkills.subcategories.find(
+    (s) => s.slug === "cookie-shaping"
+  );
+  const subFlavoringSkills = bakingSkills.subcategories.find(
+    (s) => s.slug === "flavoring-skills"
+  );
+
+  const subIngredientSelection = ingredientsCompare.subcategories.find(
+    (s) => s.slug === "ingredient-selection"
+  );
+  const subIngredientStorage = ingredientsCompare.subcategories.find(
+    (s) => s.slug === "ingredient-storage"
+  );
+
+  const subApplianceSelection = bakingTools.subcategories.find(
+    (s) => s.slug === "appliance-selection"
+  );
+  const subMeasuringTools = bakingTools.subcategories.find(
+    (s) => s.slug === "measuring-tools"
+  );
+  const subPackagingSelection = bakingTools.subcategories.find(
+    (s) => s.slug === "packaging-selection"
+  );
+
+  // 建立文章
+  console.log("Creating articles...");
+  await prisma.article.createMany({
+    data: [
+      {
+        title: "新手也能成功！戚風蛋糕的黃金比例與烘焙秘訣",
+        slug: "chiffon-cake-recipe",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: juansRecipes.id,
+        subCategoryId: subCakeRecipes.id,
+      },
+      {
+        title: "手工餅乾完整指南：鬆脆、軟Q一次學會",
+        slug: "handmade-cookie-guide",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: juansRecipes.id,
+        subCategoryId: subCookieRecipes.id,
+      },
+      {
+        title: "下午茶必備！三款簡單又美味的鹹派做法",
+        slug: "savory-pie-recipes",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: juansRecipes.id,
+        subCategoryId: subSavoryRecipes.id,
+      },
+
+      {
+        title: "蛋糕裝飾新手必看：簡單技巧打造專業級外觀",
+        slug: "cake-decoration-tips",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: bakingSkills.id,
+        subCategoryId: subCakeDecoration.id,
+      },
+      {
+        title: "餅乾不再走樣！掌握完美塑形的關鍵小技巧",
+        slug: "cookie-shaping-tips",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: bakingSkills.id,
+        subCategoryId: subCookieShaping.id,
+      },
+      {
+        title: "烘焙調味全攻略：如何用香料提升蛋糕與餅乾風味",
+        slug: "baking-flavoring-guide",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: bakingSkills.id,
+        subCategoryId: subFlavoringSkills.id,
+      },
+
+      {
+        title: "烘焙食材挑選指南：麵粉、奶油、巧克力怎麼選才對？",
+        slug: "ingredient-selection-guide",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: ingredientsCompare.id,
+        subCategoryId: subIngredientSelection.id,
+      },
+      {
+        title: "烘焙食材保存方法：延長新鮮度的專業祕訣",
+        slug: "ingredient-storage-tips",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: ingredientsCompare.id,
+        subCategoryId: subIngredientStorage.id,
+      },
+
+      {
+        title: "烤箱、打蛋機怎麼選？烘焙電器購買指南",
+        slug: "baking-appliance-selection",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: bakingTools.id,
+        subCategoryId: subApplianceSelection.id,
+      },
+      {
+        title: "精準是成功關鍵！烘焙計量器具挑選全攻略",
+        slug: "measuring-tools-guide",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: bakingTools.id,
+        subCategoryId: subMeasuringTools.id,
+      },
+      {
+        title: "烘焙成品包裝指南：美觀、保鮮與送禮的最佳選擇",
+        slug: "baking-packaging-guide",
+        excerpt: "",
+        content: "",
+        coverImageUrl: "",
+        publishedAt: new Date(),
+        categoryId: bakingTools.id,
+        subCategoryId: subPackagingSelection.id,
+      },
+    ],
+  });
 
   // 建立大分類與子分類
   console.log("Creating categories & subcategories...");
@@ -317,18 +542,6 @@ async function main() {
       productvariant: {
         create: [{ variantName: "1條", price: 520, isDefault: true }],
       },
-    },
-  });
-
-  // 文章
-  console.log("Creating article...");
-  await prisma.article.create({
-    data: {
-      title: "居家打發的 3 個穩定技巧",
-      slug: "whipping-tips",
-      excerpt: "器具冷卻、糖分比例、打發程度判斷是關鍵…",
-      content: "<p>詳細內容…</p>",
-      publishedAt: new Date(),
     },
   });
 
