@@ -10,6 +10,7 @@ import banner from "./routes/banners.js";
 import newsRouter from "./routes/news.js";
 import categories from "./routes/categories.js";
 import subcategories from "./routes/subcategories.js";
+import cart from "./routes/cart.js";
 import { sessionMiddleware } from "./middlewares/session.js";
 
 const app = express();
@@ -45,6 +46,7 @@ app.use("/api/banners", banner);
 app.use("/api/news", newsRouter);
 app.use("/api/categories", categories);
 app.use("/api/subcategories", subcategories);
+app.use("/api/cart", cart);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API on http://localhost:${port}`));
