@@ -57,7 +57,9 @@
         </button>
 
         <div class="flex gap-2 mt-3 md:mt-0">
-          <button class="btn btn-primary ml-6">加入購物車</button>
+          <button class="btn btn-primary ml-6" @click="addToCart">
+            加入購物車
+          </button>
           <button class="btn btn-secondary">立即購買</button>
         </div>
       </div>
@@ -118,6 +120,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import ImageZoom from "../components/ImageZoom.vue";
 import ProductCard from "../components/ProductCard.vue";
+import { useCartStore } from "../stores/cartStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const route = useRoute();
@@ -128,6 +131,7 @@ const selectedVariant = ref(null);
 const quantity = ref(1);
 const recommendations = ref([]);
 const detailSections = ref([]);
+const cart = useCartStore();
 
 onMounted(async () => {
   // 單品
@@ -172,5 +176,10 @@ function increaseQty() {
 }
 function decreaseQty() {
   if (quantity.value > 1) quantity.value--;
+}
+
+function addToCart() {
+  if (!selectedVariant.value) return;
+  cart.addToCart(selectedVariant.value.id, quantity.value);
 }
 </script>

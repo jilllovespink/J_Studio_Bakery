@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import "./style.css";
 import App from "./App.vue";
 import router from "./router";
+import { createPinia } from "pinia";
 /* Font Awesome */
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -33,5 +34,6 @@ library.add(
 
 const app = createApp(App);
 app.use(router);
+app.use(createPinia());
 app.mount("#app");
 app.component("FontAwesomeIcon", FontAwesomeIcon); // 全域註冊

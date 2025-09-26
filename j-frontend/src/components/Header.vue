@@ -77,22 +77,17 @@
         <!-- 購物車 -->
         <router-link
           to="/cart"
-          class="text-primary hover:text-primary/80 transition"
+          class="relative text-primary hover:text-primary/80 transition"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+          <FontAwesomeIcon :icon="faCartShopping" class="h-6 w-6" />
+
+          <!-- 數量 Badge -->
+          <span
+            v-if="cart.cartCount > 0"
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21h4"
-            />
-          </svg>
+            {{ cart.cartCount }}
+          </span>
         </router-link>
 
         <!-- 登入 -->
@@ -166,15 +161,20 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { useCartStore } from "../stores/cartStore"; // 引入 Pinia Store
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const router = useRouter();
 const isOpen = ref(false);
 const query = ref("");
 const results = ref([]);
 const showResults = ref(false);
+const cart = useCartStore()
+
 
 const navLinks = [
   { label: "首頁", to: "/" },
@@ -206,4 +206,9 @@ const goToProduct = (slug) => {
   showResults.value = false;
   router.push(`/products/${slug}`);
 };
+
+// 元件掛載時載入購物車
+onMounted(() => {
+  cart.fetchCart();
+});
 </script>

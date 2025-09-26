@@ -587,6 +587,46 @@ async function main() {
     ],
   });
 
+  // 折扣碼
+  console.log("Creating discount codes...");
+  await prisma.discount_code.createMany({
+    data: [
+      {
+        code: "WELCOME100",
+        type: "fixed", // 固定折抵
+        value: 100,
+        isActive: true,
+        expiresAt: new Date("2025-12-31"),
+      },
+      {
+        code: "SALE10",
+        type: "percent", // 打折
+        value: 10, // 代表 10%
+        isActive: true,
+        expiresAt: new Date("2025-06-30"),
+      },
+    ],
+  });
+
+  // 加價購商品
+  console.log("Creating addon products...");
+  await prisma.addon_product.createMany({
+    data: [
+      {
+        name: "品牌紙袋",
+        price: 5.0,
+        imageUrl: "/images/addons/bag.jpg",
+        status: true,
+      },
+      {
+        name: "精裝木盒",
+        price: 199.0,
+        imageUrl: "/images/addons/woodbox.jpg",
+        status: true,
+      },
+    ],
+  });
+
   console.log("Seed completed successfully.");
 }
 

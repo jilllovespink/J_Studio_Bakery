@@ -41,6 +41,15 @@ model Article {
   subcategory   ArticleSubCategory @relation(fields: [subCategoryId], references: [id])
 }
 
+model addon_product {
+  id       Int     @id @default(autoincrement())
+  name     String
+  price    Decimal @db.Decimal(10,2)
+  imageUrl String? @db.VarChar(1000)
+  status   Boolean @default(true)  // 上架/下架
+  createdAt DateTime @default(now())
+}
+
 model banners {
   id         Int                @id @default(autoincrement())
   image      String             @db.VarChar(255)
@@ -78,6 +87,16 @@ model courseintent {
   course    course   @relation(fields: [courseId], references: [id], onDelete: Cascade, map: "CourseIntent_courseId_fkey")
 
   @@index([courseId, createdAt], map: "CourseIntent_courseId_createdAt_idx")
+}
+
+model discount_code {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique               // 折扣碼字串，例如 "WELCOME100"
+  type      String                         // 折扣類型：percent / fixed
+  value     Int                             // 折扣數值，例如 100 或 10 (%)
+  isActive  Boolean  @default(true)        // 是否啟用
+  expiresAt DateTime?                      // 過期時間，可選
+  createdAt DateTime  @default(now())
 }
 
 model order {
