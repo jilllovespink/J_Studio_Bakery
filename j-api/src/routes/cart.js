@@ -81,6 +81,7 @@ router.post("/", async (req, res) => {
     req.session.cart.push({
       variantId: variant.id,
       productId: variant.productId,
+      productName: variant.product.name,
       variantName: variant.variantName,
       price: Number(variant.price), // Prisma Decimal 轉數字
       quantity,

@@ -7,6 +7,10 @@ import ProductsView from "../views/ProductsView.vue";
 
 import ProductDetailView from "../views/ProductDetailView.vue";
 import ArticlesView from "../views/ArticlesView.vue";
+import CartView from "../views/CartView.vue";
+import PaymentView from "../views/PaymentView.vue";
+import OrderCompleteView from "../views/OrderCompleteView.vue";
+import CheckoutView from "../views/CheckoutView.vue";
 
 const routes = [
   {
@@ -30,6 +34,18 @@ const routes = [
         redirect: "/products/top10",
       },
       { path: "articles", name: "articles", component: ArticlesView },
+      { path: "cart", name: "cart", component: CartView },
+      { path: "checkout", name: "checkout", component: CheckoutView },
+      {
+        path: "order-complete",
+        name: "order-complete",
+        component: OrderCompleteView,
+      },
+      {
+        path: "payment",
+        name: "payment",
+        component: PaymentView,
+      },
     ],
   },
 ];

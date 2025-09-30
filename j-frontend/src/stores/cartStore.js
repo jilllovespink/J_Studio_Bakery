@@ -4,18 +4,22 @@ import api from "../services/api.js";
 export const useCartStore = defineStore("cart", {
   state: () => ({
     items: [], // 購物車項目
-    total: 0, // 總金額
+    summary: {}, // 小計、折扣、運費、合計
+    loading: false,
   }),
 
   actions: {
     // 1. 取得購物車
     async fetchCart() {
+      this.loading = true;
       try {
         const res = await api.get("/cart", { withCredentials: true });
         this.items = res.data.items;
-        this.total = res.data.total;
+        this.summary = res.data.summary;
       } catch (err) {
         console.error("載入購物車失敗:", err);
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -28,7 +32,7 @@ export const useCartStore = defineStore("cart", {
           { withCredentials: true }
         );
         this.items = res.data.items;
-        this.total = res.data.total;
+        this.summary = res.data.summary;
       } catch (err) {
         console.error("加入購物車失敗:", err);
       }
@@ -43,7 +47,7 @@ export const useCartStore = defineStore("cart", {
           { withCredentials: true }
         );
         this.items = res.data.items;
-        this.total = res.data.total;
+        this.summary = res.data.summary;
       } catch (err) {
         console.error("更新數量失敗:", err);
       }
@@ -56,18 +60,40 @@ export const useCartStore = defineStore("cart", {
           withCredentials: true,
         });
         this.items = res.data.items;
-        this.total = res.data.total;
+        this.summary = res.data.summary;
       } catch (err) {
         console.error("刪除商品失敗:", err);
       }
     },
 
-    // 5. 清空購物車
+    // 5. 套用折扣碼
+    async applyDiscount(code) {
+      try {
+        const res = await api.post("/cart/set-discount", { code });
+        this.items = res.data.items;
+        this.summary = res.data.summary;
+      } catch (err) {
+        console.error("折扣碼失敗", err);
+      }
+    },
+
+    // 6. 設定取貨方式
+    async setShipping(method) {
+      try {
+        const res = await api.post("/cart/set-shipping", { method });
+        this.items = res.data.items;
+        this.summary = res.data.summary;
+      } catch (err) {
+        console.error("設定取貨方式失敗", err);
+      }
+    },
+
+    // ˙. 清空購物車
     async clearCart() {
       try {
         const res = await api.delete("/cart", { withCredentials: true });
         this.items = res.data.items;
-        this.total = res.data.total;
+        this.summary = res.data.summary;
       } catch (err) {
         console.error("清空購物車失敗:", err);
       }
