@@ -11,6 +11,9 @@ import newsRouter from "./routes/news.js";
 import categories from "./routes/categories.js";
 import subcategories from "./routes/subcategories.js";
 import cart from "./routes/cart.js";
+import discounts from "./routes/discounts.js";
+import addons from "./routes/addons.js";
+
 import { sessionMiddleware } from "./middlewares/session.js";
 
 const app = express();
@@ -47,6 +50,8 @@ app.use("/api/news", newsRouter);
 app.use("/api/categories", categories);
 app.use("/api/subcategories", subcategories);
 app.use("/api/cart", cart);
+app.use("/api/discounts", discounts);
+app.use("/api/addons", addons);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API on http://localhost:${port}`));

@@ -3,35 +3,57 @@ import express from "express";
 
 const router = express.Router();
 
-/**
- * 購物車存在 session 裡
- * 每個使用者都有一個獨立的 req.session.cart
-{
- *     variantId: 101,
- *     productId: 1,
- *     variantName: "6吋蛋糕",
- *     price: 500.00,
- *     quantity: 2
- *   },
- *   {
- *     variantId: 102,
- *     productId: 1,
- *     variantName: "8吋蛋糕",
- *     price: 800.00,
- *     quantity: 1
- *   } 
- */
+// 運送方式與運費設定
+const shippingOptions = {
+  home: { label: "宅配", fee: 190 },
+  pickup: { label: "門市自取", fee: 0 },
+};
+
+// 計算購物車總結
+function calculateSummary(cart, discount, shippingMethod) {
+  const subtotal = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  // 折扣
+  let discountAmount = 0;
+  if (discount) {
+    if (discount.type === "fixed") {
+      discountAmount = discount.value;
+    } else if (discount.type === "percent") {
+      discountAmount = Math.floor(subtotal * (discount.value / 100));
+    }
+  }
+
+  // 運費
+  const shippingFee = shippingOptions[shippingMethod]?.fee || 0;
+  const total = subtotal - discountAmount + shippingFee;
+
+  return {
+    subtotal,
+    discountAmount,
+    shippingFee,
+    total,
+  };
+}
+
+// 統一回傳購物車狀態
+function respondWithCart(req, res) {
+  if (!req.session.cart) req.session.cart = [];
+  return res.json({
+    items: req.session.cart,
+    summary: calculateSummary(
+      req.session.cart,
+      req.session.discount,
+      req.session.shippingMethod || "home"
+    ),
+  });
+}
 
 // 查看購物車
 router.get("/", (req, res) => {
-  if (!req.session.cart) req.session.cart = [];
-  res.json({
-    items: req.session.cart,
-    total: req.session.cart.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    ),
-  });
+  respondWithCart(req, res);
 });
 
 // 新增商品到購物車
@@ -65,13 +87,7 @@ router.post("/", async (req, res) => {
     });
   }
 
-  res.json({
-    items: req.session.cart,
-    total: req.session.cart.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    ),
-  });
+  respondWithCart(req, res);
 });
 
 // 更新商品數量
@@ -83,16 +99,10 @@ router.put("/:variantId", (req, res) => {
     return res.status(400).json({ message: "購物車是空的" });
 
   const item = req.session.cart.find((i) => i.variantId === Number(variantId));
+  if (!item) return res.status(404).json({ message: "找不到該商品" });
 
-  if (item) {
-    item.quantity = quantity;
-    res.json({
-      items: req.session.cart,
-      total: req.session.cart.reduce((sum, i) => sum + i.price * i.quantity, 0),
-    });
-  } else {
-    res.status(404).json({ message: "找不到該商品" });
-  }
+  item.quantity = quantity;
+  respondWithCart(req, res);
 });
 
 // 刪除單一商品
@@ -104,17 +114,55 @@ router.delete("/:variantId", (req, res) => {
   req.session.cart = req.session.cart.filter(
     (i) => i.variantId !== Number(variantId)
   );
+  respondWithCart(req, res);
+});
 
-  res.json({
-    items: req.session.cart,
-    total: req.session.cart.reduce((sum, i) => sum + i.price * i.quantity, 0),
+// 設定折扣碼
+router.post("/set-discount", async (req, res) => {
+  const { code } = req.body;
+
+  // 1. 檢查折扣碼是否存在、是否啟用
+  const discount = await prisma.discount_code.findUnique({
+    where: { code },
   });
+
+  if (!discount || !discount.isActive) {
+    return res.status(400).json({ message: "折扣碼無效" });
+  }
+
+  // 2. 檢查是否過期
+  if (discount.expiresAt && new Date() > discount.expiresAt) {
+    return res.status(400).json({ message: "折扣碼已過期" });
+  }
+
+  // 3. 存進 session
+  req.session.discount = {
+    type: discount.type,
+    value: discount.value,
+  };
+
+  // 4. 回傳最新購物車狀態
+  respondWithCart(req, res);
+});
+
+// 設定取貨方式
+router.post("/set-shipping", (req, res) => {
+  const { method } = req.body;
+
+  if (!shippingOptions[method]) {
+    return res.status(400).json({ message: "無效的取貨方式" });
+  }
+
+  req.session.shippingMethod = method;
+  respondWithCart(req, res);
 });
 
 // 清空購物車
 router.delete("/", (req, res) => {
   req.session.cart = [];
-  res.json({ items: [], total: 0 });
+  req.session.discount = null;
+  req.session.shippingMethod = "home";
+  respondWithCart(req, res);
 });
 
 export default router;
