@@ -1,6 +1,25 @@
 import { Router } from "express";
 import { prisma } from "../prisma.js";
-import { Prisma } from "@prisma/client";
+import crypto from "crypto";
+import qs from "qs";
+
+const MERCHANT_ID = "3002607";
+const HASH_KEY = "pwFHCqoQZGmho4w6";
+const HASH_IV = "EkRm7iFT261dpevs";
+
+// 產生檢查碼函式
+function generateCheckMacValue(params) {
+  const sorted = Object.keys(params)
+    .sort((a, b) => a.localeCompare(b))
+    .reduce((acc, key) => {
+      acc[key] = params[key];
+      return acc;
+    }, {});
+
+  let query = `HashKey=${HASH_KEY}&${qs.stringify(sorted)}&HashIV=${HASH_IV}`;
+  query = encodeURIComponent(query).toLowerCase();
+  return crypto.createHash("md5").update(query).digest("hex").toUpperCase();
+}
 
 const r = Router();
 
@@ -104,10 +123,38 @@ r.post("/", async (req, res) => {
       include: { orderitem: true },
     });
 
+    // === 新增：產生綠界參數 ===
+    const tradeDate = new Date()
+      .toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
+      .replace(/\//g, "/");
+
+    const baseParams = {
+      MerchantID: MERCHANT_ID,
+      MerchantTradeNo: order.orderNo, // 用 DB 訂單號
+      MerchantTradeDate: tradeDate,
+      PaymentType: "aio",
+      TotalAmount: Number(order.totalAmount),
+      TradeDesc: "J Studio 訂單付款",
+      ItemName: order.orderitem
+        .map((it) => `商品${it.productId}x${it.qty}`)
+        .join("#"),
+      ReturnURL: "https://你的後端/api/ecpay/callback", // 後端通知
+      ClientBackURL: "http://localhost:5173/payment-success", // 前端導回
+      ChoosePayment: "Credit",
+    };
+
+    const CheckMacValue = generateCheckMacValue(baseParams);
+
+    const form = { ...baseParams, CheckMacValue };
+
     return res.status(201).json({
       orderNo: order.orderNo,
       amount: Number(order.totalAmount),
       status: order.status,
+      ecpay: {
+        action: "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5",
+        params: form,
+      },
     });
   } catch (err) {
     console.error("建立訂單失敗", err);
