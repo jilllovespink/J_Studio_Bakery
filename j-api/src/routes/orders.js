@@ -1,136 +1,83 @@
 import { Router } from "express";
 import { prisma } from "../prisma.js";
-import { z } from "zod";
-import crypto from "crypto";
+import { Prisma } from "@prisma/client";
 
 const r = Router();
 
-// 驗證 DTO（最小夠用）
-const CreateOrderDTO = z.object({
-  buyer: z.object({
-    name: z.string().min(1),
-    email: z.string().email(),
-    phone: z.string().min(8),
-    address: z.string().min(5),
-  }),
-  shippingMethod: z.enum(["BLACKCAT", "PICKUP"]),
-  items: z
-    .array(
-      z.object({
-        productId: z.number().int().positive(),
-        variantId: z.number().int().positive().optional(),
-        qty: z.number().int().positive(),
-        addOns: z
-          .array(
-            z.object({
-              type: z.string(),
-              qty: z.number().int().positive(),
-              price: z.number().nonnegative(),
-            })
-          )
-          .optional(),
-      })
-    )
-    .min(1),
-});
-
-// 產生可讀訂單編號（外顯用）
-function makeOrderNo() {
+// --- 訂單編號：日期 + 當日流水號 ---
+async function generateOrderNo() {
   const d = new Date();
   const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(
     2,
     "0"
   )}${String(d.getDate()).padStart(2, "0")}`;
-  const rand = crypto.randomBytes(3).toString("hex").toUpperCase();
-  return `JUEAN-${ymd}-${rand}`;
+
+  // 當天起訖時間
+  const start = new Date(d);
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(d);
+  end.setHours(23, 59, 59, 999);
+
+  // 當天已存在的訂單數量
+  const countToday = await prisma.order.count({
+    where: {
+      createdAt: {
+        gte: start,
+        lt: end,
+      },
+    },
+  });
+  // 編號 = yyyymmdd + 四位數流水號
+  const serial = String(countToday + 1).padStart(4, "0");
+  return `${ymd}${serial}`;
 }
 
-r.get("/health", (req, res) => res.json({ ok: true }));
-
-// 建立訂單（未導轉金流）
+// --- 建立訂單 ---
 r.post("/", async (req, res) => {
   try {
-    const parsed = CreateOrderDTO.safeParse(req.body);
-    if (!parsed.success) {
+    const { buyer, shippingMethod, items } = req.body;
+
+    // 簡單驗證（更嚴格驗證已經在前端做過）
+    if (!buyer?.name || !buyer?.email || !buyer?.phone) {
       return res.status(400).json({
-        error: { code: "VALIDATION_ERROR", message: parsed.error.message },
+        error: { code: "VALIDATION_ERROR", message: "缺少必要的訂購人資訊" },
       });
     }
-    const { buyer, shippingMethod, items } = parsed.data;
-
-    // 1) 從 DB 取回商品/規格做「伺服端重新計價」
-    const productIds = items.map((i) => i.productId);
-    const variantIds = items.map((i) => i.variantId).filter(Boolean);
-
-    const [products, variants] = await Promise.all([
-      prisma.product.findMany({ where: { id: { in: productIds } } }),
-      prisma.productVariant.findMany({ where: { id: { in: variantIds } } }),
-    ]);
-
-    const productMap = new Map(products.map((p) => [p.id, p]));
-    const variantMap = new Map(variants.map((v) => [v.id, v]));
-
-    let subtotal = 0;
-    const orderItemsData = [];
-
-    for (const it of items) {
-      const p = productMap.get(it.productId);
-      if (!p) {
-        return res.status(400).json({
-          error: {
-            code: "NOT_FOUND",
-            message: `Product ${it.productId} not found`,
-          },
-        });
-      }
-
-      let price = 0;
-
-      if (it.variantId) {
-        const v = variantMap.get(it.variantId);
-        if (!v || v.productId !== p.id) {
-          return res.status(400).json({
-            error: {
-              code: "INVALID_VARIANT",
-              message: "Variant not match product",
-            },
-          });
-        }
-        price = Number(v.price);
-      } else {
-        const def = await prisma.productVariant.findFirst({
-          where: { productId: p.id, isDefault: true },
-        });
-        if (!def)
-          return res.status(400).json({
-            error: { code: "NO_DEFAULT", message: "No default variant" },
-          });
-        price = Number(def.price);
-      }
-
-      const addOnTotal = (it.addOns || []).reduce(
-        (s, a) => s + a.price * a.qty,
-        0
-      );
-      const line = price * it.qty + addOnTotal;
-      subtotal += line;
-
-      orderItemsData.push({
-        productId: p.id,
-        variantId: it.variantId ?? null,
-        qty: it.qty,
-        unitPrice: price,
-        addOnJson: it.addOns || null,
+    if (!["home", "pickup"].includes(shippingMethod)) {
+      return res.status(400).json({
+        error: { code: "INVALID_SHIPPING", message: "運送方式不正確" },
+      });
+    }
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({
+        error: { code: "NO_ITEMS", message: "訂單必須包含至少一項商品" },
       });
     }
 
-    // 運費規則：滿 2000 免運；否則 160（MVP 先簡化）
-    const shippingFee = subtotal >= 2000 ? 0 : 160;
-    const discount = 0;
-    const totalAmount = subtotal + shippingFee - discount;
+    // 小計
+    const subtotal = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
 
-    // 2) 寫入訂單（狀態 PENDING）
-    const orderNo = makeOrderNo();
+    // 運費 (前端已經有設定: home=190, pickup=0)
+    const shippingFee = shippingMethod === "home" ? 190 : 0;
+
+    // 折扣處理
+    let discountAmount = 0;
+    if (req.session?.discount) {
+      const d = req.session.discount;
+      if (d.type === "fixed") {
+        discountAmount = d.value;
+      } else if (d.type === "percent") {
+        discountAmount = Math.floor(subtotal * (d.value / 100));
+      }
+    }
+
+    const totalAmount = subtotal + shippingFee - discountAmount;
+
+    // 產生訂單編號
+    const orderNo = await generateOrderNo();
+
+    // 寫入資料庫
     const order = await prisma.order.create({
       data: {
         orderNo,
@@ -141,23 +88,29 @@ r.post("/", async (req, res) => {
         shippingMethod,
         subtotal,
         shippingFee,
-        discount,
+        discount: discountAmount,
         totalAmount,
         status: "PENDING",
-        paymentMethod: "ECPAY_CREDIT",
-        items: { create: orderItemsData },
+        paymentMethod: "ECPAY_CREDIT", // 先固定，之後再接綠界
+        orderitem: {
+          create: items.map((it) => ({
+            productId: it.productId,
+            variantId: it.variantId,
+            qty: it.quantity,
+            unitPrice: it.price,
+          })),
+        },
       },
-      include: { items: true },
+      include: { orderitem: true },
     });
 
-    // 3) 回傳（先不導轉金流，之後再加 ECPay 欄位）
     return res.status(201).json({
       orderNo: order.orderNo,
       amount: Number(order.totalAmount),
       status: order.status,
     });
   } catch (err) {
-    console.error(err);
+    console.error("建立訂單失敗", err);
     return res
       .status(500)
       .json({ error: { code: "INTERNAL_ERROR", message: "Server error" } });

@@ -159,7 +159,7 @@ async function submitCheckout(values) {
     if (values.paymentMethod === "現場付款") {
       router.push({ name: "OrderComplete", query: { orderNo: data.orderNo } })
     } else {
-      router.push({ name: "Payment", query: { orderNo: data.orderNo } })
+      router.push({ name: "payment", query: { orderNo: data.orderNo } })
     }
   } catch (e) {
     console.error("建立訂單失敗", e)
