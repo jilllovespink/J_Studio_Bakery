@@ -13,7 +13,7 @@ const CreateOrderDTO = z.object({
     phone: z.string().min(8),
     address: z.string().min(5),
   }),
-  shippingMethod: z.enum(["BLACKCAT"]),
+  shippingMethod: z.enum(["BLACKCAT", "PICKUP"]),
   items: z
     .array(
       z.object({

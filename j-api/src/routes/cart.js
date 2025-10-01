@@ -35,6 +35,7 @@ function calculateSummary(cart, discount, shippingMethod) {
     discountAmount,
     shippingFee,
     total,
+    shippingMethod,
   };
 }
 

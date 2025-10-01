@@ -32,18 +32,23 @@
       <p class="text-lg font-bold">合計：NT$ {{ cart.summary?.total }}</p>
     </div>
 
-    <button class="btn btn-primary w-full">前往結帳</button>
+    <button class="btn btn-primary w-full" @click="goCheckout">前往結帳</button>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router"
 import { useCartStore } from "../../stores/cartStore";
 
+const router = useRouter()
 const cart = useCartStore();
 const shippingMethod = ref("home");
 
 function setShipping() {
   cart.setShipping(shippingMethod.value);
+}
+function goCheckout() {
+  router.push({ name: "checkout" })
 }
 </script>
