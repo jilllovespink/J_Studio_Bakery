@@ -13,6 +13,7 @@ import subcategories from "./routes/subcategories.js";
 import cart from "./routes/cart.js";
 import discounts from "./routes/discounts.js";
 import addons from "./routes/addons.js";
+import tappay from "./routes/tappay.js";
 
 import { sessionMiddleware } from "./middlewares/session.js";
 
@@ -52,6 +53,7 @@ app.use("/api/subcategories", subcategories);
 app.use("/api/cart", cart);
 app.use("/api/discounts", discounts);
 app.use("/api/addons", addons);
+app.use("/api/tappay", tappay);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API on http://localhost:${port}`));

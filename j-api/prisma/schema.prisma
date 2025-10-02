@@ -113,7 +113,7 @@ model order {
   totalAmount    Decimal              @db.Decimal(10, 2)
   status         order_status         @default(PENDING)
   paymentMethod  order_paymentMethod  @default(ECPAY_CREDIT)
-  ecpayTradeNo   String?              @unique(map: "Order_ecpayTradeNo_key")
+  paymentInfo    Json?
   paidAt         DateTime?
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
