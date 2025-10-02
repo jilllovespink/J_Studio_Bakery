@@ -10,6 +10,7 @@
       :validation-schema="orderSchema"
       :validation-schema-params="{ isHome: isHome.value }"
       @submit="submitCheckout"
+      v-slot="{ values }"
       class="max-w-5xl mx-auto bg-white rounded-2xl shadow p-8 space-y-10"
     >
       <!-- 訂購資料 -->
@@ -81,6 +82,25 @@
           </label>
           <ErrorMessage name="paymentMethod" class="text-red-500 text-sm" />
         </div>
+
+        <!-- TapPay 卡片欄位，只有信用卡時顯示 -->
+        <div
+          :class="{ hidden: values.paymentMethod !== '信用卡' }"
+          class="mt-6 space-y-4"
+        >
+          <div
+            class="tpfield border border-gray-300 rounded-lg px-3 py-2 w-full h-12"
+            id="card-number"
+          ></div>
+          <div
+            class="tpfield border border-gray-300 rounded-lg px-3 py-2 w-full h-12"
+            id="card-expiration-date"
+          ></div>
+          <div
+            class="tpfield border border-gray-300 rounded-lg px-3 py-2 w-full h-12"
+            id="card-ccv"
+          ></div>
+        </div>
       </section>
 
       <!-- 確認付款 -->
@@ -109,15 +129,48 @@ import api from "../services/api"
 
 const router = useRouter()
 const cart = useCartStore()
-onMounted(() => cart.fetchCart())
-
 const loading = ref(false)
 
 // 從 Pinia summary 讀 shippingMethod（home / pickup）
 const shippingMethod = computed(() => cart.summary?.shippingMethod)
-
-// 用 computed 轉成布林值，避免 template 裡用引號判斷
 const isHome = computed(() => shippingMethod.value === "home")
+
+onMounted(() =>{
+cart.fetchCart()
+
+// 初始化 TapPay SDK
+  TPDirect.setupSDK(
+    import.meta.env.VITE_TAPPAY_APP_ID,
+    import.meta.env.VITE_TAPPAY_APP_KEY,
+    "sandbox"
+  )
+
+  TPDirect.card.setup({
+    fields: {
+      number: { element: "#card-number", placeholder: "**** **** **** ****" },
+      expirationDate: { element: "#card-expiration-date", placeholder: "MM / YY" },
+      ccv: { element: "#card-ccv", placeholder: "CCV" },
+    },
+    styles: {
+      input: {
+      "color": "#1f2937",        // text-gray-800
+      "font-size": "16px",
+      "font-family": "inherit",
+      "letter-spacing": "0.05em",
+      "padding": "0.5rem 0.75rem"
+    },
+    "input::placeholder": {
+      "color": "#9ca3af"         // text-gray-400
+    },
+    ".valid": {
+      "color": "#10b981"         // green-500
+    },
+    ".invalid": {
+      "color": "#ef4444"         // red-500
+    },
+  }})
+})
+
 
 // 下單當天
 const today = new Date()
@@ -155,16 +208,44 @@ async function submitCheckout(values) {
     }
 
     const { data } = await api.post("/orders", payload)
+    const orderNo = data.orderNo
 
     if (values.paymentMethod === "現場付款") {
-      router.push({ name: "OrderComplete", query: { orderNo: data.orderNo } })
+      router.push({ name: "order-complete", query: { orderNo: data.orderNo } })
     } else {
-      router.push({ name: "payment", query: { orderNo: data.orderNo } })
+       // === TapPay 信用卡流程 ===
+      TPDirect.card.getPrime(async (result) => {
+        if (result.status !== 0) {
+          alert("取得 prime 失敗：" + result.msg)
+          loading.value = false
+          return
+        }
+
+        const prime = result.card.prime
+        console.log("取得 prime:", prime)
+
+        try {
+          const payRes = await api.post("/tappay/pay", {
+            prime,
+            orderNo,
+          })
+
+          if (payRes.data.success) {
+            router.push({ name: "order-complete", query: { orderNo } })
+          } else {
+            alert("付款失敗：" + payRes.data.message)
+          }
+        } catch (err) {
+          console.error("付款 API 錯誤", err)
+          alert("付款失敗，請稍後再試")
+        } finally {
+          loading.value = false
+        }
+      })
     }
   } catch (e) {
     console.error("建立訂單失敗", e)
     alert("建立訂單失敗，請稍後再試")
-  } finally {
     loading.value = false
   }
 }

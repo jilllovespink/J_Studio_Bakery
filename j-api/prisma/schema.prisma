@@ -32,7 +32,7 @@ model Article {
   title         String
   slug          String   @unique
   excerpt       String
-  content       String
+  content       String   @db.Text
   coverImageUrl String?
   publishedAt   DateTime @default(now())
   categoryId    Int
@@ -112,7 +112,7 @@ model order {
   discount       Decimal              @default(0.00) @db.Decimal(10, 2)
   totalAmount    Decimal              @db.Decimal(10, 2)
   status         order_status         @default(PENDING)
-  paymentMethod  order_paymentMethod  @default(ECPAY_CREDIT)
+  paymentMethod  order_paymentMethod  
   paymentInfo    Json?
   paidAt         DateTime?
   createdAt      DateTime             @default(now())
@@ -228,7 +228,9 @@ enum order_status {
 
 enum order_paymentMethod {
   ECPAY_CREDIT
-}
+  TAPPAY_CREDIT
+  CASH
+  }
 
 enum banners_fontColor {
   light

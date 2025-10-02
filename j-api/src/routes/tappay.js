@@ -4,9 +4,8 @@ import { prisma } from "../prisma.js";
 
 const r = Router();
 
-const APP_KEY =
-  "app_xMENquzDbwYyniL02tCaswjO6xhDjnvcSMcMjbO2iJTbtUaIGUZ859Vrr5x0"; // TapPay sandbox AppKey
-const MERCHANT_ID = "JStudio_FUBON_POS_3"; // TapPay sandbox merchant_id
+const PARTNER_KEY = process.env.TAPPAY_PARTNER_KEY;
+const MERCHANT_ID = process.env.TAPPAY_MERCHANT_ID;
 
 // TapPay 付款 API
 r.post("/pay", async (req, res) => {
@@ -26,7 +25,7 @@ r.post("/pay", async (req, res) => {
       "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime",
       {
         prime,
-        partner_key: APP_KEY,
+        partner_key: PARTNER_KEY,
         merchant_id: MERCHANT_ID,
         details: `J Studio 訂單 ${orderNo}`,
         amount: order.totalAmount, // 用資料庫金額
@@ -39,7 +38,7 @@ r.post("/pay", async (req, res) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": APP_KEY,
+          "x-api-key": PARTNER_KEY,
         },
       }
     );
