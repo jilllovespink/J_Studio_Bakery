@@ -194,7 +194,7 @@ function formatDate(d) {
 
 // 送出訂單
 async function submitCheckout(values) {
-  loading.value = true
+  loading.value = true;
   try {
     const payload = {
       buyer: {
@@ -202,51 +202,62 @@ async function submitCheckout(values) {
         phone: values.phone,
         email: values.email,
         address: isHome.value ? values.address : "N/A",
+        shipDate: values.pickupDate, // 預計出貨日
       },
       shippingMethod: shippingMethod.value,
       items: cart.items,
-    }
+      paymentMethod: values.paymentMethod === "信用卡" ? "TAPPAY_CREDIT" : "CASH",
+    };
 
-    const { data } = await api.post("/orders", payload)
-    const orderNo = data.orderNo
+    // === 建立訂單 ===
+    const { data } = await api.post("/orders", payload);
+    const orderNo = data.orderNo;
 
     if (values.paymentMethod === "現場付款") {
-      router.push({ name: "order-complete", query: { orderNo: data.orderNo } })
+      // 現場付款不需刷卡，直接跳轉完成頁
+      router.push({ name: "order-complete", query: { orderNo } });
     } else {
-       // === TapPay 信用卡流程 ===
+      // === TapPay 信用卡流程 ===
       TPDirect.card.getPrime(async (result) => {
         if (result.status !== 0) {
-          alert("取得 prime 失敗：" + result.msg)
-          loading.value = false
-          return
+          alert("取得 prime 失敗：" + result.msg);
+          loading.value = false;
+          return;
         }
 
-        const prime = result.card.prime
-        console.log("取得 prime:", prime)
+        const prime = result.card.prime;
+        console.log("取得 prime:", prime);
 
         try {
+          // 1. 呼叫後端付款 API
           const payRes = await api.post("/tappay/pay", {
             prime,
             orderNo,
-          })
+          });
 
           if (payRes.data.success) {
-            router.push({ name: "order-complete", query: { orderNo } })
+            // 2. 付款成功 → 更新訂單狀態為已付款
+            await api.patch(`/orders/${orderNo}/pay`, {
+              paymentResult: payRes.data, // 把 TapPay 回傳的資料存進 DB
+            });
+
+            // 3. 跳轉到完成頁
+            router.push({ name: "order-complete", query: { orderNo } });
           } else {
-            alert("付款失敗：" + payRes.data.message)
+            alert("付款失敗：" + payRes.data.message);
           }
         } catch (err) {
-          console.error("付款 API 錯誤", err)
-          alert("付款失敗，請稍後再試")
+          console.error("付款流程錯誤", err);
+          alert("付款失敗，請稍後再試");
         } finally {
-          loading.value = false
+          loading.value = false;
         }
-      })
+      });
     }
   } catch (e) {
-    console.error("建立訂單失敗", e)
-    alert("建立訂單失敗，請稍後再試")
-    loading.value = false
+    console.error("建立訂單失敗", e);
+    alert("建立訂單失敗，請稍後再試");
+    loading.value = false;
   }
 }
 </script>
