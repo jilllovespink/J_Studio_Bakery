@@ -56,7 +56,7 @@
           {{ activeCategory.name }}
         </h2>
         <p class="text-white text-sm md:text-base">
-          {{ activeCategory.description }}
+          {{ activeCategory.description || '' }}
         </p>
       </div>
 
@@ -91,17 +91,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useRoute } from "vue-router";
+import { smoothScrollTo } from "../composables/useSmoothScroll.js";
+
 
 const props = defineProps({
   title: String,                // 頁面標題
   basePath: String,             // Router 前綴 (/products, /tips)
   categoryApi: String,       // 專門抓分類
   subcategoryApi: String,
+  itemApi: { type: String, default: "products" }, // "products" | "articles"
   cardComponent: Object,        // 卡片元件 (ProductCard / ArticleCard)
   hotApi: String,
-  itemProp: { type: String, default: "item" }, // 傳給卡片的 prop 名稱
+  stickyOffset: { type: Number, default: 0 },     // sticky header 的高度
   hotCategory: { type: Boolean, default: false } // 是否需要 TOP10 特殊分類
 });
 
@@ -109,18 +112,31 @@ const API_URL = import.meta.env.VITE_API_URL;
 const route = useRoute();
 
 const categories = ref([]);
-const activeCategory = ref(null);
-const activeSubcategories = ref([]);
 const itemsBySub = ref({});
+
+// 依路由參數與資料，計算出目前的大分類 / 子分類清單
+const activeCategory = computed(() => {
+  const slug = route.params.categorySlug;
+  if (!slug) return null;
+  return categories.value.find(c => c.slug === slug) || null;
+});
+
+const activeSubcategories = computed(() => activeCategory.value?.subcategories || []);
+
+// 輔助：抓 JSON
+const fetchJSON = async (url) => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Fetch failed: ${url} ${res.status}`);
+  return res.json();
+};
 
 // 抓分類
 const fetchCategories = async () => {
-  const res = await fetch(`${API_URL}${props.categoryApi}`);
-  const data = await res.json();
+  const data = await fetchJSON(`${API_URL}${props.categoryApi}`);
 
+    // 逐一填入子分類
   for (const cat of data) {
-    const subRes = await fetch(`${API_URL}${props.categoryApi}/${cat.id}/subcategories`);
-    cat.subcategories = await subRes.json();
+    const subcategories  = await fetchJSON(`${API_URL}${props.categoryApi}/${cat.id}/subcategories`);
   }
 
   if (props.hotCategory) {
@@ -136,42 +152,43 @@ const fetchCategories = async () => {
   categories.value = data;
 };
 
-// 初始化分類
-const initActiveCategory = async () => {
+// 依目前大分類載入每個子分類的 items
+const loadItemsForActiveCategory = async () => {
   const slug = route.params.categorySlug;
-  if (!slug || categories.value.length === 0) return;
+  if (!slug || !activeCategory.value) return;
 
+    // TOP10 特例
   if (props.hotCategory && slug === "top10") {
-    activeCategory.value = categories.value.find((c) => c.slug === "top10");
-    activeSubcategories.value = activeCategory.value.subcategories;
-
-    const res = await fetch(`${API_URL}${props.hotApi}`);
-    const hotItems = await res.json();
-    itemsBySub.value = { "hot-sub" : hotItems };
-    return;
+    const hotItems = await fetchJSON(`${API_URL}${props.hotApi}`);
+    itemsBySub.value = { "hot-sub": hotItems };
+  } else {
+    const bySub = {};
+    for (const sub of activeSubcategories.value) {
+      bySub[sub.id] = await fetchJSON(`${API_URL}${props.subcategoryApi}/${sub.id}/${props.itemApi}`);
+    }
+    itemsBySub.value = bySub;
   }
 
-  activeCategory.value = categories.value.find((c) => c.slug === slug);
-  activeSubcategories.value = activeCategory.value?.subcategories || [];
-
-  itemsBySub.value = {};
-  for (const sub of activeSubcategories.value) {
-    const res = await fetch(`${API_URL}${props.subcategoryApi}/${sub.id}/products`);
-    itemsBySub.value[sub.id] = await res.json();
-  }
-
+ // 若網址帶 hash（或切換分類後仍保留 hash），平滑捲動到錨點
   if (route.hash) {
-    await nextTick();
-    const el = document.querySelector(route.hash);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    await smoothScrollTo(route.hash, { offset: props.stickyOffset });
   }
 };
 
-watch(
-  () => [route.params.categorySlug, categories.value],
-  initActiveCategory,
-  { immediate: true }
-);
+// 初次載入
+onMounted(async () => {
+  await fetchCategories();
+  await loadItemsForActiveCategory();
+});
 
-onMounted(fetchCategories);
+// 切換大分類時重新載入子分類 items
+watch(() => route.params.categorySlug, async () => {
+  await loadItemsForActiveCategory();
+});
+
+// 單純切換 hash（點同一大分類下的子分類）時，平滑捲動
+watch(() => route.hash, async (hash) => {
+  if (!hash) return;
+  await smoothScrollTo(hash, { offset: props.stickyOffset });
+});
 </script>
