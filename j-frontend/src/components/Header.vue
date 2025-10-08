@@ -89,27 +89,6 @@
             {{ cart.cartCount }}
           </span>
         </router-link>
-
-        <!-- 登入 -->
-        <router-link
-          to="/login"
-          class="text-primary hover:text-primary/80 transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5.121 17.804A9 9 0 1118 9m-6 12v-6m0 0v-6m0 6h6m-6 0H6"
-            />
-          </svg>
-        </router-link>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -178,7 +157,7 @@ const cart = useCartStore()
 
 const navLinks = [
   { label: "首頁", to: "/" },
-  { label: "關於我們", to: "/about" },
+  { label: "最新消息", to: "/news" },
   { label: "甜點系列", to: "/products" },
   { label: "烘焙祕訣", to: "/articles" },
 ];

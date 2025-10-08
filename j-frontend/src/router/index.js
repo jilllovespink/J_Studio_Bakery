@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Layout from "../layouts/Layout.vue";
 
 import HomeView from "../views/HomeView.vue";
-// import AboutView from "@/views/AboutView.vue";
+import NewsView from "../views/NewsView.vue";
 import ProductsView from "../views/ProductsView.vue";
 
 import ProductDetailView from "../views/ProductDetailView.vue";
@@ -32,6 +32,11 @@ const routes = [
       {
         path: "/products",
         redirect: "/products/top10",
+      },
+      {
+        path: "news",
+        name: "news",
+        component: NewsView,
       },
       { path: "articles", redirect: "/articles/juans-recipes" },
       {
