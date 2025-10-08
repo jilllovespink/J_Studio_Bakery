@@ -4,10 +4,11 @@
     basePath="/products"
     categoryApi="/api/categories"
     subcategoryApi="/api/subcategories"
-    hotApi="/api/products/hot"
+    itemApi="products"
     :cardComponent="ProductCard"
     itemProp="product"
     hotCategory
+    hotApi="/api/products/hot"
   />
 </template>
 <script setup>

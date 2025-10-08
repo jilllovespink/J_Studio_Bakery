@@ -15,6 +15,8 @@ import discounts from "./routes/discounts.js";
 import addons from "./routes/addons.js";
 import tappay from "./routes/tappay.js";
 import articles from "./routes/articles.js";
+import articleCategories from "./routes/articleCategories.js";
+import articleSubcategories from "./routes/articleSubcategories.js";
 
 import { sessionMiddleware } from "./middlewares/session.js";
 
@@ -56,6 +58,8 @@ app.use("/api/discounts", discounts);
 app.use("/api/addons", addons);
 app.use("/api/tappay", tappay);
 app.use("/api/articles", articles);
+app.use("/api/article-categories", articleCategories);
+app.use("/api/article-subcategories", articleSubcategories);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API on http://localhost:${port}`));

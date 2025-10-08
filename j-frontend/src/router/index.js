@@ -33,7 +33,13 @@ const routes = [
         path: "/products",
         redirect: "/products/top10",
       },
-      { path: "articles", name: "articles", component: ArticlesView },
+      { path: "articles", redirect: "/articles/juans-recipes" },
+      {
+        path: "articles/:categorySlug",
+        name: "articles",
+        component: ArticlesView,
+      },
+
       { path: "cart", name: "cart", component: CartView },
       { path: "checkout", name: "checkout", component: CheckoutView },
       {

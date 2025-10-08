@@ -9,7 +9,7 @@
       </span>
       <span>/</span>
       <span class="ml-2">
-        {{ article.subCategory?.name || "未分類" }}
+        {{ article.subcategory?.name || "未分類" }}
       </span>
     </div>
 

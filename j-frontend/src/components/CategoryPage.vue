@@ -104,7 +104,8 @@ const props = defineProps({
   itemApi: { type: String, default: "products" }, // "products" | "articles"
   cardComponent: Object,        // 卡片元件 (ProductCard / ArticleCard)
   hotApi: String,
-  stickyOffset: { type: Number, default: 0 },     // sticky header 的高度
+  stickyOffset: { type: Number, default: 0 },
+  itemProp: { type: String, default: "item" },      // sticky header 的高度
   hotCategory: { type: Boolean, default: false } // 是否需要 TOP10 特殊分類
 });
 
@@ -137,6 +138,7 @@ const fetchCategories = async () => {
     // 逐一填入子分類
   for (const cat of data) {
     const subcategories  = await fetchJSON(`${API_URL}${props.categoryApi}/${cat.id}/subcategories`);
+    cat.subcategories = subcategories;
   }
 
   if (props.hotCategory) {
