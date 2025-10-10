@@ -39,7 +39,7 @@ const fetchNews = async () => {
   try {
     const res = await fetch(`${API_URL}/api/news`);
     if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
-    newsList.value = await res.json(); // ✅ 後端已排序，不需前端再 sort()
+    newsList.value = await res.json(); // 後端已排序，不需前端再 sort()
   } catch (err) {
     console.error("載入最新消息失敗:", err);
   }

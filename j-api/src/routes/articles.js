@@ -24,30 +24,6 @@ r.get("/", async (req, res) => {
 });
 
 /**
- * 依照 slug 抓單篇文章
- */
-r.get("/:slug", async (req, res) => {
-  try {
-    const article = await prisma.article.findUnique({
-      where: { slug: req.params.slug },
-      include: {
-        category: true,
-        subcategory: true,
-      },
-    });
-
-    if (!article) {
-      return res.status(404).json({ error: "Article not found" });
-    }
-
-    res.json(article);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch article" });
-  }
-});
-
-/**
  * 依子分類 ID 抓文章清單
  */
 r.get("/by-subcategory/:subId", async (req, res) => {
@@ -86,6 +62,55 @@ r.get("/by-category/:catId", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch articles by category" });
+  }
+});
+
+/**
+ * 依照 slug 抓單篇文章（含 content）
+ * 提供前端文章詳情頁使用
+ */
+r.get("/:slug", async (req, res) => {
+  try {
+    const article = await prisma.article.findUnique({
+      where: { slug: req.params.slug },
+      include: {
+        category: true,
+        subcategory: true,
+      },
+    });
+
+    if (!article) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    res.json(article);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch article" });
+  }
+});
+/**
+ * 依照 slug 抓單篇文章（含 content）
+ * 提供前端文章詳情頁使用
+ */
+r.get("/:slug", async (req, res) => {
+  try {
+    const article = await prisma.article.findUnique({
+      where: { slug: req.params.slug },
+      include: {
+        category: true,
+        subcategory: true,
+      },
+    });
+
+    if (!article) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    res.json(article);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch article" });
   }
 });
 

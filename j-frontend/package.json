@@ -13,6 +13,7 @@
     "@fortawesome/free-brands-svg-icons": "^7.0.1",
     "@fortawesome/free-solid-svg-icons": "^7.0.1",
     "@fortawesome/vue-fontawesome": "^3.1.2",
+    "@tailwindcss/vite": "^4.1.14",
     "axios": "^1.11.0",
     "pinia": "^3.0.3",
     "swiper": "^11.2.10",
