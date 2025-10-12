@@ -22,7 +22,7 @@
         <ScrollLink
           :target="`#${item.id}`"
           :offset="offset"
-          class="flex items-center gap-2 hover:text-primary transition-colors"
+          class="w-full text-left flex items-center gap-2 hover:text-primary transition-colors"
         >
           <span class="inline-block text-muted-foreground select-none">
             {{ item.level === 3 ? '⦿' : '▶' }}
@@ -55,9 +55,3 @@ defineProps({
   },
 });
 </script>
-
-<style scoped>
-a {
-  @apply block w-full text-left;
-}
-</style>

@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-import CheckoutProgress from "../components/cart/CheckoutProgress.vue";
-import CartList from "../components/cart/CartList.vue";
-import AddonSection from "../components/cart/AddonSection.vue";
-import ShippingAndSummary from "../components/cart/ShippingAndSummary.vue";
+import CheckoutProgress from "../components/Cart/CheckoutProgress.vue";
+import CartList from "../components/Cart/CartList.vue";
+import AddonSection from "../components/Cart/AddonSection.vue";
+import ShippingAndSummary from "../components/Cart/ShippingAndSummary.vue";
 </script>
