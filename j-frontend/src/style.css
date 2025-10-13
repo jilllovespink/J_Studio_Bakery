@@ -42,7 +42,7 @@
   --color-muted-foreground: #bbbbbb;
 }
 
-/* 🔤 base reset */
+/* base reset */
 @layer base {
   body {
     @apply bg-background text-foreground font-sans;
@@ -79,6 +79,24 @@
     font-weight: 400;
     line-height: 1.6;
     color: var(--color-foreground);
+  }
+  .article-content h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1.8rem;
+    font-size: 2rem;
+  }
+
+  .article-content h3 {
+    margin-top: 2rem;
+    margin-bottom: 1.2rem;
+    font-size: 1.8rem;
+  }
+
+  .article-content p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.9;
+    font-size: 1.2rem;
   }
 }
 

@@ -13,29 +13,28 @@
           <span>娟姐</span>
           <span class="flex items-center gap-1">
             <i class="fa-regular fa-calendar"></i>
-            {{ article.publishedAt }}
+            {{ formatDate(article.publishedAt) }}
           </span>
           <span v-if="article.category" class="flex items-center gap-1">
             <i class="fa-solid fa-bookmark"></i>
             {{ article.category.name }}
           </span>
-          <span v-if="article.subcategory">
-            / {{ article.subcategory.name }}</span
+          <span v-if="article.subcategory"
+            >｜　{{ article.subcategory.name }}</span
           >
         </div>
 
         <div
           v-if="article.coverImageUrl"
-          class="rounded-2xl overflow-hidden mb-6"
+          class="rounded-2xl overflow-hidden mb-6 h-[280px] md:h-[320px]"
         >
-          <img
+          <LazyImage
             :src="article.coverImageUrl"
             :alt="article.title"
             class="w-full h-auto object-cover"
           />
         </div>
       </header>
-
       <!-- 文章目錄 -->
       <ArticleToc v-if="toc.length" :toc="toc" :offset="100" />
 
@@ -43,7 +42,7 @@
       <article
         v-if="article"
         v-html="article.content"
-        class="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-foreground/90"
+        class="article-content max-w-none text-foreground"
       ></article>
 
       <!-- 作者介紹 -->
@@ -85,6 +84,7 @@ import { ref, onMounted, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import ArticleToc from "../components/Article/ArticleToc.vue";
 import ArticleCard from "../components/ArticleCard.vue";
+import LazyImage from "../components/LazyImage.vue";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const route = useRoute();
@@ -92,6 +92,11 @@ const route = useRoute();
 const article = ref(null);
 const relatedArticles = ref([]);
 const toc = ref([]);
+
+// 格式化日期函式（只取前10碼）
+const formatDate = (dateString) => {
+  return dateString ? dateString.slice(0, 10) : "";
+};
 
 // 抓取單篇文章資料
 const fetchArticle = async () => {

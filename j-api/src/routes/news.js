@@ -14,5 +14,23 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch news" });
   }
 });
+// 取得單篇最新消息
+router.get("/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const newsItem = await prisma.news.findUnique({
+      where: { id },
+    });
+
+    if (!newsItem) {
+      return res.status(404).json({ error: "News not found" });
+    }
+
+    res.json(newsItem);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch news item" });
+  }
+});
 
 export default router;

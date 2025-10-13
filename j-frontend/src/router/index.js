@@ -46,7 +46,11 @@ const routes = [
         name: "articles",
         component: ArticlesView,
       },
-
+      {
+        path: "article/:slug",
+        name: "articleDetail",
+        component: ArticleDetailView,
+      },
       { path: "cart", name: "cart", component: CartView },
       { path: "checkout", name: "checkout", component: CheckoutView },
       {
@@ -60,11 +64,6 @@ const routes = [
         component: PaymentView,
       },
     ],
-  },
-  {
-    path: "/article/:slug",
-    name: "articleDetail",
-    component: ArticleDetailView,
   },
 ];
 
