@@ -26,9 +26,12 @@
     </p>
 
     <!-- 閱讀更多 -->
-    <a href="#" class="mt-4 text-primary font-medium hover:underline">
+    <RouterLink
+      :to="`/news/${item.id}`"
+      class="mt-4 text-primary font-medium hover:underline self-start"
+    >
       閱讀更多 →
-    </a>
+    </RouterLink>
   </div>
 </template>
 

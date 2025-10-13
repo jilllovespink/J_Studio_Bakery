@@ -14,6 +14,8 @@ import PaymentView from "../views/PaymentView.vue";
 import OrderCompleteView from "../views/OrderCompleteView.vue";
 import CheckoutView from "../views/CheckoutView.vue";
 
+import NewsDetailView from "../views/NewsDetailView.vue";
+
 const routes = [
   {
     path: "/",
@@ -40,6 +42,12 @@ const routes = [
         name: "news",
         component: NewsView,
       },
+      {
+        path: "news/:id",
+        name: "newsDetailView",
+        component: NewsDetailView,
+      },
+
       { path: "articles", redirect: "/articles/juans-recipes" },
       {
         path: "articles/:categorySlug",
