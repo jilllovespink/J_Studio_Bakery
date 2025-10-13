@@ -7,6 +7,8 @@ import ProductsView from "../views/ProductsView.vue";
 
 import ProductDetailView from "../views/ProductDetailView.vue";
 import ArticlesView from "../views/ArticlesView.vue";
+import ArticleDetailView from "../views/ArticleDetailView.vue";
+
 import CartView from "../views/CartView.vue";
 import PaymentView from "../views/PaymentView.vue";
 import OrderCompleteView from "../views/OrderCompleteView.vue";
@@ -58,6 +60,11 @@ const routes = [
         component: PaymentView,
       },
     ],
+  },
+  {
+    path: "/article/:slug",
+    name: "articleDetail",
+    component: ArticleDetailView,
   },
 ];
 

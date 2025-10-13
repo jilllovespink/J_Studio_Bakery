@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import ScrollLink from "@/components/ScrollLink.vue";
+import ScrollLink from "../ScrollLink.vue";
 
 defineProps({
   toc: {

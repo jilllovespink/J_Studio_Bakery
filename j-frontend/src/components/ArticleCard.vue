@@ -35,7 +35,7 @@
 
     <!-- 閱讀更多 -->
     <RouterLink
-      :to="`/articles/${article.slug}`"
+      :to="{ name: 'articleDetail', params: { slug: article.slug } }"
       class="mt-4 text-primary font-medium hover:underline"
     >
       閱讀更多 →
