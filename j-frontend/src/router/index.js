@@ -55,7 +55,7 @@ const routes = [
         component: ArticlesView,
       },
       {
-        path: "article/:slug",
+        path: "articles/:slug",
         name: "articleDetail",
         component: ArticleDetailView,
       },
@@ -70,6 +70,11 @@ const routes = [
         path: "payment",
         name: "payment",
         component: PaymentView,
+      },
+      {
+        path: "/:pathMatch(.*)*",
+        name: "NotFound",
+        component: () => import("../views/NotFoundView.vue"),
       },
     ],
   },
