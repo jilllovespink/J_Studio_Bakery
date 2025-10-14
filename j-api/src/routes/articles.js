@@ -23,6 +23,24 @@ r.get("/", async (req, res) => {
   }
 });
 
+// 取得最新三篇文章
+r.get("/latest", async (req, res) => {
+  try {
+    const articles = await prisma.article.findMany({
+      orderBy: { publishedAt: "desc" }, // 依發佈時間新到舊排序
+      take: 3, // 只取前三篇
+      include: {
+        category: true, // 如果前端需要顯示分類，可加上
+        subcategory: true,
+      },
+    });
+    res.json(articles);
+  } catch (err) {
+    console.error("Failed to fetch latest articles:", err);
+    res.status(500).json({ error: "Failed to fetch latest articles" });
+  }
+});
+
 /**
  * 依子分類 ID 抓文章清單
  */
