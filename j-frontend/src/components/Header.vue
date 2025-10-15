@@ -4,8 +4,8 @@
       <!-- Logo -->
       <router-link to="/" class="flex items-center gap-2">
         <img
-          src="https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Flogo%2FScreenshot%202025-09-02%20170034.png?alt=media&token=ec2f47cf-bea8-4bb7-9fe5-be464fdf764e"
-          alt="娟姊的烘焙工作室"
+          src="https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Flogo%2F6ffabd4e-cb31-40b6-a48e-fd7151ef7d29.png?alt=media&token=1697fe0b-3d46-4b58-8997-ee24d197bab4"
+          alt="娟姊烘焙坊"
           class="h-16 w-auto hover:opacity-80 transition"
         />
       </router-link>

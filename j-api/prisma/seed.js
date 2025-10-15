@@ -763,7 +763,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-catscoming-835752.jpg?alt=media&token=527f10c9-efc8-4960-9965-d5ac431a4881",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、新鮮雞蛋、鮮奶油、砂糖、當季草莓",
       shelfLife: "冷藏保存2天，冷凍保存5天",
       flavorProfile:
@@ -786,7 +786,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-catscoming-1543800.jpg?alt=media&token=a79f599e-13f9-4fb6-90d5-a3a6df157ac6",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
-      isHot: false,
+      isHot: true,
       ingredients: "低筋麵粉、新鮮雞蛋、鮮奶油、小山園抹茶粉、細砂糖",
       shelfLife: "冷藏保存3天，冷凍保存7天",
       flavorProfile:
@@ -809,7 +809,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-dhayaeddart-5276663.jpg?alt=media&token=4ef721a1-a1d5-483a-97fb-d000053892ef",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、雞蛋、砂糖、香蕉泥、黑巧克力、鮮奶油",
       shelfLife: "冷藏保存2天，冷凍保存5天",
       flavorProfile:
@@ -832,7 +832,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-chiecharon-1027811.jpg?alt=media&token=00da7bb9-9b3e-4a97-aa19-b16817777f69",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
-      isHot: false,
+      isHot: true,
       ingredients: "低筋麵粉、新鮮雞蛋、鮮奶油、杏仁片、時令水果、砂糖",
       shelfLife: "冷藏保存2天",
       flavorProfile:
@@ -852,7 +852,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-natalya-choohrova-118638025-9834064.jpg?alt=media&token=ce34ab4d-79fe-43f2-a98a-fa1706ec022a",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、雞蛋、鮮奶油、櫻桃果醬、黑櫻桃、砂糖、可可粉",
       shelfLife: "冷藏保存3天",
       flavorProfile:
@@ -876,7 +876,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-angelicabritto-31111197.jpg?alt=media&token=835ba938-3dd6-49a3-bd6d-437bbc2b8e3b",
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
-      isHot: false,
+      isHot: true,
       ingredients: "奶油乳酪、雞蛋、鮮奶油、砂糖、餅乾底",
       shelfLife: "冷藏保存3天，冷凍保存10天",
       flavorProfile:
@@ -900,7 +900,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-livilla-latini-1678510737-27850026.jpg?alt=media&token=52dd3574-60f9-4314-821b-9041ba75b37b",
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "黑巧克力、無鹽奶油、砂糖、雞蛋、麵粉、核桃碎",
       shelfLife: "常溫下2天，冷藏保存5天",
       flavorProfile:
@@ -923,7 +923,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-marta-dzedyshko-1042863-6341572.jpg?alt=media&token=dfbbe5a7-8e11-44de-a628-223f1553f83f",
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
-      isHot: false,
+      isHot: true,
       ingredients: "黑巧克力、鮮奶油、可可粉、雞蛋、砂糖",
       shelfLife: "冷藏保存4天，冷凍保存10天",
       flavorProfile:
@@ -943,7 +943,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-ella-olsson-572949-3026810.jpg?alt=media&token=5d482d1d-c993-46c9-b71b-c0e9078730aa",
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "黑巧克力、鮮奶油、餅乾碎、砂糖、可可粉",
       shelfLife: "冷藏保存2天",
       flavorProfile:
@@ -987,7 +987,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-brent-keane-181485-1702373.jpg?alt=media&token=f2d087f3-cb46-4bd5-ba31-ba96b33123c6",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、雞蛋、奶油、鮮奶油、可食用鮮花、砂糖",
       shelfLife: "冷藏保存2天",
       flavorProfile:
@@ -1033,7 +1033,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-suki-lee-110686949-15730547.jpg?alt=media&token=0c15c212-49cb-4c50-85b9-890516a077b2",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "雞蛋、低筋麵粉、芒果泥、椰奶、奶霜、葡萄柚果粒",
       shelfLife: "冷藏保存2天",
       flavorProfile:
@@ -1053,7 +1053,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-catscoming-9419880.jpg?alt=media&token=64250245-ad3f-4265-acdb-c5c2e5527678",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
-      isHot: false,
+      isHot: true,
       ingredients: "低筋麵粉、檸檬皮、柳橙果泥、奶油霜、砂糖",
       shelfLife: "冷藏保存3天",
       flavorProfile:
@@ -1073,7 +1073,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-ph-m-thanh-d-t-1295528-4424640.jpg?alt=media&token=710503fd-4435-4a1b-bf8d-fa1924088889",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、草莓、鮮奶油、砂糖、雞蛋",
       shelfLife: "冷藏保存2天",
       flavorProfile:
@@ -1177,7 +1177,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-tim-douglas-6210740.jpg?alt=media&token=7a0d0484-ad7d-4161-997f-454e7d2eba09",
       categoryId: classicCakes.id,
       subcategoryId: subCupcakes?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、奶油霜、抹茶粉、食用糖珠、砂糖",
       shelfLife: "冷藏保存2天",
       flavorProfile:
@@ -1218,7 +1218,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-razaneadra-14136384.jpg?alt=media&token=16aa6dec-ed03-45e8-9d56-e59852129d39",
       categoryId: handmadeCookies.id,
       subcategoryId: subSoftCookies?.id ?? null,
-      isHot: false,
+      isHot: true,
       ingredients: "中筋麵粉、無鹽奶油、砂糖、雞蛋、黑巧克力豆",
       shelfLife: "常溫下3天，冷藏保存7天",
       flavorProfile:
@@ -1239,7 +1239,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-louai-benzaoui-435435842-20653559.jpg?alt=media&token=e22e62d7-7d93-4d0b-88b3-8df677a43b4f",
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、可可粉、無鹽奶油、砂糖、雞蛋",
       shelfLife: "常溫下7天，冷藏保存14天",
       flavorProfile:
@@ -1286,7 +1286,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-ekaterina-bolovtsova-5702693.jpg?alt=media&token=a567f3d6-ed18-453f-97ad-2ec71c267452",
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、無鹽奶油、糖粉、蛋白霜、食用色素",
       shelfLife: "常溫下10天，密封保存14天",
       flavorProfile:
@@ -1332,7 +1332,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-meggy-kadam-aryanto-3797063-9620137.jpg?alt=media&token=ad217d1f-e3fb-41a1-8878-74d02f52e1f5",
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、無鹽奶油、砂糖、蔓越莓果乾、雞蛋",
       shelfLife: "常溫下7天，冷藏保存14天",
       flavorProfile:
@@ -1425,7 +1425,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-tiago-antonio-530108832-28786988.jpg?alt=media&token=944aa2bd-84de-4fd4-bb32-88f4a936d039",
       categoryId: handmadeCookies.id,
       subcategoryId: subSoftCookies?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "中筋麵粉、無鹽奶油、黑巧克力豆、花生醬、砂糖、雞蛋",
       shelfLife: "常溫下3天，冷藏保存7天",
       flavorProfile:
@@ -1493,7 +1493,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-alesiakozik-6546570.jpg?alt=media&token=a8fbf711-a6d6-4720-b4b5-fa9ecff90910",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、無鹽奶油、糖粉、小山園抹茶粉、香草粉",
       shelfLife: "常溫下5天，冷藏保存10天",
       flavorProfile:
@@ -1539,7 +1539,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-cphbythea-5604808.jpg?alt=media&token=8f1ef590-c3fa-4b21-8625-fbc8647b690c",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、無鹽奶油、糖粉、焦糖醬、香草粉",
       shelfLife: "常溫下5天，冷藏保存10天",
       flavorProfile:
@@ -1585,7 +1585,7 @@ async function main() {
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-daria86-8306609.jpg?alt=media&token=d87ab781-6ae4-4746-9387-7536635916a2",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
-      isHot: true,
+      isHot: false,
       ingredients: "低筋麵粉、無鹽奶油、糖粉、櫻花粉、白巧克力豆",
       shelfLife: "常溫下5天，冷藏保存10天",
       flavorProfile:
@@ -1627,6 +1627,7 @@ async function main() {
       name: "桂花荔枝馬卡龍",
       slug: "osmanthus-lychee-macaron",
       description: "荔枝果香融合桂花清香，清新雅緻。",
+      isHot: true,
       heroImage:
         "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-valeriya-7474225.jpg?alt=media&token=c4278135-f5e3-4402-89c2-c66ec99e9530",
       categoryId: macarons.id,

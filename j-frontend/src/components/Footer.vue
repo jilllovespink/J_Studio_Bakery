@@ -8,11 +8,11 @@
       <div>
         <div class="flex items-center gap-2 mb-4">
           <img
-            src="https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Flogo%2FScreenshot%202025-09-02%20170034.png?alt=media&token=ec2f47cf-bea8-4bb7-9fe5-be464fdf764e"
-            alt="娟姊的烘焙工坊 Logo"
+            src="https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Flogo%2F6ffabd4e-cb31-40b6-a48e-fd7151ef7d29.png?alt=media&token=2c6f297e-65e2-45c3-a091-ad7efd8c7abd"
+            alt="娟姊烘焙坊 Logo"
             class="h-10 w-auto"
           />
-          <h2 class="text-lg font-semibold">娟姊的烘焙工坊</h2>
+          <h2 class="text-lg font-semibold">娟姊烘焙坊</h2>
         </div>
         <p class="text-sm text-muted-foreground">
           專注於手工精緻甜點，用心烘焙每一份溫暖與甜蜜，為您的日常生活增添美好時光。
@@ -73,7 +73,7 @@
         class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground gap-2"
       >
         <p class="text-sm text-muted-foreground">
-          © 2025 娟姊的烘焙工坊 Juan's Patisserie Studio. All rights reserved. |
+          © 2025 娟姊烘焙坊 Juan's Patisserie Studio. All rights reserved. |
           網頁設計 by <span class="text-primary font-medium">DJ 網頁設計</span>
         </p>
       </div>

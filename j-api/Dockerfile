@@ -1,10 +1,12 @@
 FROM node:22.16-alpine
 
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
 
 COPY . .
 
-EXPOSE 5173
-CMD ["npm", "run", "dev", "--", "--host"]
+EXPOSE 3000
+
+CMD npx prisma migrate deploy && npm run dev
