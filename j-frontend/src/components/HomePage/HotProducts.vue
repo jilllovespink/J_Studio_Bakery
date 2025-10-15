@@ -1,5 +1,5 @@
 <template>
-  <section class="py-16 bg-background">
+  <section class="py-20 bg-white hot-products">
     <div class="text-center mb-12">
       <h2 class="text-3xl font-bold">人氣甜點</h2>
       <p class="text-muted-foreground mt-2">
@@ -14,10 +14,10 @@
       :autoplay="{ delay: 3000, disableOnInteraction: false }"
       navigation
       :breakpoints="{
-        320: { slidesPerView: 2, spaceBetween: 12 },
-        768: { slidesPerView: 4, spaceBetween: 20 }
+        320: { slidesPerView: 2, spaceBetween: 10 },
+        768: { slidesPerView: 4, spaceBetween: 10 }
       }"
-      class="max-w-7xl mx-auto overflow-visible"
+      class="relative px-4 md:px-8 overflow-visible"
     >
       <SwiperSlide v-for="item in hotProducts" :key="item.id">
         <ProductCard :product="item" />
@@ -52,24 +52,27 @@ onMounted(async () => {
 });
 </script>
 <style scoped>
-:deep(.swiper),
-:deep(.swiper-wrapper) {
-  overflow: visible !important;
-}
-/* 桌機 / 平板：箭頭浮在外側 */
-:deep(.swiper-button-prev) {
-  left: -30px;
+/* --- 外層容器設定 --- */
+.hot-products {
+  position: relative; /* 讓箭頭能絕對定位 */
 }
 
-:deep(.swiper-button-next) {
-  right: -30px;
+/* --- Swiper Slide 對齊 --- */
+:deep(.swiper-slide) {
+  display: flex;
+  justify-content: center;
 }
 
-/* 箭頭外觀（延續你要的樣式） */
+/* --- 桌機 / 平板：箭頭設定 --- */
 :deep(.swiper-button-next),
 :deep(.swiper-button-prev) {
-  width: 44px;
-  height: 44px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+
+  width: 40px;
+  height: 40px;
   color: var(--color-primary);
   background: rgba(245, 158, 110, 0.15);
   border-radius: 50%;
@@ -79,13 +82,16 @@ onMounted(async () => {
   transition: all 0.3s ease;
 }
 
+
+
+/* --- 滑過樣式 --- */
 :deep(.swiper-button-next:hover),
 :deep(.swiper-button-prev:hover) {
   background: var(--color-primary);
   color: var(--color-primary-foreground);
 }
 
-/* 小螢幕 (<768px) 隱藏箭頭 */
+/* --- 小螢幕 (<768px)：隱藏箭頭 --- */
 @media (max-width: 767px) {
   :deep(.swiper-button-next),
   :deep(.swiper-button-prev) {

@@ -121,6 +121,8 @@ import { useRoute } from "vue-router";
 import ImageZoom from "../components/ImageZoom.vue";
 import ProductCard from "../components/ProductCard.vue";
 import { useCartStore } from "../stores/cartStore";
+import { usePageMeta } from "../composables/usePageMeta";
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 const route = useRoute();
@@ -133,11 +135,20 @@ const recommendations = ref([]);
 const detailSections = ref([]);
 const cart = useCartStore();
 
+// 綁定 reactive title / description
+const title = ref("");
+const description = ref("");
+usePageMeta({ title, description });
+
+
 onMounted(async () => {
   // 單品
    const res = await fetch(`${API_URL}/api/products/detail/${slug}`);
   const data = await res.json();
   product.value = data;
+
+  title.value = product.value.name;
+  description.value = product.value.description;
 
   if (product.value?.productvariants?.length) {
     selectedVariant.value =

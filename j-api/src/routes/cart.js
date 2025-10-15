@@ -81,6 +81,7 @@ router.post("/", async (req, res) => {
   } else {
     req.session.cart.push({
       variantId: variant.id,
+      productImg: variant.product.heroImage,
       productId: variant.productId,
       productName: variant.product.name,
       variantName: variant.variantName,
@@ -100,7 +101,7 @@ router.put("/:variantId", (req, res) => {
   if (!req.session.cart)
     return res.status(400).json({ message: "購物車是空的" });
 
-  const item = req.session.cart.find((i) => i.variantId === Number(variantId));
+  const item = req.session.cart.find((i) => i.variantId == variantId);
   if (!item) return res.status(404).json({ message: "找不到該商品" });
 
   item.quantity = quantity;
@@ -113,9 +114,7 @@ router.delete("/:variantId", (req, res) => {
   if (!req.session.cart)
     return res.status(400).json({ message: "購物車是空的" });
 
-  req.session.cart = req.session.cart.filter(
-    (i) => i.variantId !== Number(variantId)
-  );
+  req.session.cart = req.session.cart.filter((i) => i.variantId != variantId);
   respondWithCart(req, res);
 });
 
@@ -156,6 +155,30 @@ router.post("/set-shipping", (req, res) => {
   }
 
   req.session.shippingMethod = method;
+  respondWithCart(req, res);
+});
+
+// 新增加購商品到購物車
+router.post("/addon", async (req, res) => {
+  const { addonId, quantity } = req.body;
+
+  const addon = await prisma.addon_product.findUnique({
+    where: { id: Number(addonId) },
+  });
+
+  if (!addon) return res.status(404).json({ message: "找不到加購品" });
+
+  if (!req.session.cart) req.session.cart = [];
+
+  req.session.cart.push({
+    variantId: `addon-${addon.id}`, // 確保不跟一般商品衝突
+    productName: addon.name,
+    price: addon.price,
+    quantity,
+    productImg: addon.imageUrl,
+    variantName: "加購品",
+  });
+
   respondWithCart(req, res);
 });
 

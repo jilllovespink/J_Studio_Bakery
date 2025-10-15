@@ -8,6 +8,7 @@ async function main() {
   console.log("Deleting old data...");
   await prisma.orderItem?.deleteMany().catch(() => {});
   await prisma.order?.deleteMany().catch(() => {});
+  await prisma.banners?.deleteMany().catch(() => {});
   await prisma.productVariant?.deleteMany().catch(() => {});
   await prisma.product.deleteMany();
   await prisma.product_subcategory.deleteMany();
@@ -18,6 +19,7 @@ async function main() {
   await prisma.news.deleteMany();
   await prisma.articleSubCategory?.deleteMany().catch(() => {});
   await prisma.articleCategory?.deleteMany().catch(() => {});
+  await prisma.discount_code.deleteMany();
 
   // 建立文章大分類與子分類
   console.log("Creating article categories & subcategories...");
@@ -55,7 +57,7 @@ async function main() {
 
   const ingredientsCompare = await prisma.articleCategory.create({
     data: {
-      name: "食材比一比",
+      name: "食材挑選技巧",
       slug: "ingredients-compare",
       orderIndex: 3,
       subcategories: {
@@ -165,7 +167,8 @@ async function main() {
       總結來說，戚風蛋糕看似複雜，其實只要抓住「黃金比例」、控制蛋白打發、注意拌合手法、維持正確溫度與脫模技巧，就能大幅提升成功率。只要多練習幾次，新手也能成功做出鬆軟綿密的戚風蛋糕，為餐桌增添一份幸福的甜蜜。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-felicity-tai-7965927.jpg?alt=media&token=31b466f8-feae-46c4-bdd4-1381c6536b1d",
         publishedAt: new Date(),
         categoryId: juansRecipes.id,
         subCategoryId: subCakeRecipes.id,
@@ -209,7 +212,8 @@ async function main() {
       總結來說，手工餅乾的魅力就在於多樣性。透過調整麵粉、糖、油脂與雞蛋比例，以及掌握攪拌與烘烤技巧，你可以自由創造不同口感的餅乾。不論是鬆脆爽口，還是軟Q濕潤，都能在同一份指南中找到方向。只要多加練習，你也能輕鬆烤出屬於自己風格的完美手工餅乾。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-noellegracephotos-906054.jpg?alt=media&token=d923a6ec-21e8-451e-a16e-4864c77c9d31",
         publishedAt: new Date(),
         categoryId: juansRecipes.id,
         subCategoryId: subCookieRecipes.id,
@@ -258,7 +262,8 @@ async function main() {
       總結來說，鹹派的自由度很高，只要掌握派皮、餡料與蛋奶液的基本原則，就能創造出無限可能。無論是經典的培根起司、清爽的菠菜鮭魚，或是充滿地中海風情的蕃茄馬茲瑞拉，都能讓你的下午茶更加豐富又滿足。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-amanda-reed-88238-288264.jpg?alt=media&token=df14b0be-c887-4ed9-ae6c-3c52dc91004b",
         publishedAt: new Date(),
         categoryId: juansRecipes.id,
         subCategoryId: subSavoryRecipes.id,
@@ -303,7 +308,8 @@ async function main() {
       總結來說，蛋糕裝飾的重點不在於華麗，而在於細節與平整度。只要掌握修整與抹面的基礎，選擇合適的工具與簡單的裝飾手法，新手也能做出專業級外觀。隨著經驗累積，再慢慢加入創意元素，就能讓每一個蛋糕都充滿獨特風格。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-anete-lusina-18613267.jpg?alt=media&token=3804c06e-81ba-45f1-8537-8e684a97b69d",
         publishedAt: new Date(),
         categoryId: bakingSkills.id,
         subCategoryId: subCakeDecoration.id,
@@ -347,7 +353,8 @@ async function main() {
       總結來說，想要避免餅乾走樣，必須同時兼顧「比例正確」、「溫度控制」與「塑形技巧」。只要在烘焙前多花一點心思，掌握冷藏、整形與工具應用，就能做出外觀漂亮、口感誘人的餅乾。從今天起，你的手工餅乾不僅好吃，還能好看！
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-pavel-danilyuk-6996299.jpg?alt=media&token=6431a5c2-eed6-4dd1-9728-cb0f2e2d45cf",
         publishedAt: new Date(),
         categoryId: bakingSkills.id,
         subCategoryId: subCookieShaping.id,
@@ -391,7 +398,8 @@ async function main() {
       總結來說，香料是烘焙中最能展現創意的元素之一。只要掌握比例與搭配原則，就能輕鬆讓蛋糕與餅乾的風味更加多元。從今天起，不妨試著在你的配方中加入一點香料，為甜點增添驚喜吧！
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-june-149994-1735095.jpg?alt=media&token=6032c42d-9fa2-4447-bf84-7d9ef04932e6",
         publishedAt: new Date(),
         categoryId: bakingSkills.id,
         subCategoryId: subFlavoringSkills.id,
@@ -436,7 +444,8 @@ async function main() {
       總結來說，烘焙食材的挑選並不困難，只要掌握「麵粉看筋度、奶油看來源、巧克力看純度」三大原則，就能大幅提升作品品質。適合的食材搭配正確的技巧，才能讓你的蛋糕與餅乾更加美味可口。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-monserratsoldu-3821252.jpg?alt=media&token=07f73e01-fe73-43ad-8a38-06a7efc0d028",
         publishedAt: new Date(),
         categoryId: ingredientsCompare.id,
         subCategoryId: subIngredientSelection.id,
@@ -480,7 +489,8 @@ async function main() {
       總結來說，烘焙食材保存的原則就是「避免受潮、保持低溫、隔絕光線與空氣」。只要遵循這些基本原則，就能延長食材的新鮮度，讓你的蛋糕與餅乾始終保持最佳風味。專業烘焙師傅之所以能維持穩定品質，正是因為他們懂得照顧每一種材料，讓食材在使用前都處於完美狀態。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-rdne-8580726.jpg?alt=media&token=32b9ddcc-0677-4242-a40b-893314f95247",
         publishedAt: new Date(),
         categoryId: ingredientsCompare.id,
         subCategoryId: subIngredientStorage.id,
@@ -525,7 +535,8 @@ async function main() {
       總結來說，選購烤箱與打蛋機時，最重要的是根據自身需求與預算做決定。新手可先從實用性高的基本款開始，隨著烘焙頻率與技術提升，再逐步升級設備。合適的電器能讓烘焙之路更加順利，成果也更穩定。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-asphotography-213162.jpg?alt=media&token=68f21efb-4c8d-4ead-b5bf-7325ea95d0e6",
         publishedAt: new Date(),
         categoryId: bakingTools.id,
         subCategoryId: subApplianceSelection.id,
@@ -569,7 +580,8 @@ async function main() {
       總結來說，計量工具雖然常被忽視，但卻是影響烘焙成敗的關鍵。從電子秤到溫度計，每一項都值得投資。只要工具齊全又合適，就能大幅減少失敗率，讓你在烘焙的道路上更加順利，每一次都能烤出完美的成品。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-ron-lach-10046954.jpg?alt=media&token=d3db18f7-6d7e-42fd-81ac-f964960fc91f",
         publishedAt: new Date(),
         categoryId: bakingTools.id,
         subCategoryId: subMeasuringTools.id,
@@ -613,7 +625,8 @@ async function main() {
       總結來說，烘焙成品的包裝不只是外觀裝飾，而是兼具保鮮、美觀與實用的整體方案。只要根據產品特性與用途選擇適合的方式，不論是自用還是送禮，都能讓甜點更具價值感，留下深刻印象。
       </p>
     `,
-        coverImageUrl: "",
+        coverImageUrl:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Farticles%2Fpexels-cottonbro-6063706.jpg?alt=media&token=df212e05-266d-4908-ade3-6be614ef4234",
         publishedAt: new Date(),
         categoryId: bakingTools.id,
         subCategoryId: subPackagingSelection.id,
@@ -722,7 +735,8 @@ async function main() {
       name: "香草奶油蛋糕",
       slug: "vanilla-butter-cake",
       description: "手作香草奶油，口感綿密。",
-      heroImage: "/images/products/vanilla.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-anna-nekrashevich-7552323.jpg?alt=media&token=cca9caf9-fbfc-4a8d-b8ef-627bf5736b52",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
       isHot: true,
@@ -745,7 +759,8 @@ async function main() {
       name: "草莓鮮奶油蛋糕",
       slug: "strawberry-cream-cake",
       description: "當季草莓與輕盈鮮奶油，季節限定。",
-      heroImage: "/images/products/strawberry.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-catscoming-835752.jpg?alt=media&token=527f10c9-efc8-4960-9965-d5ac431a4881",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
       isHot: true,
@@ -767,7 +782,8 @@ async function main() {
       name: "小山園抹茶鮮奶油蛋糕",
       slug: "matcha-cream-cake",
       description: "嚴選小山園抹茶粉製作，茶香濃郁而回甘。",
-      heroImage: "/images/products/matcha-cake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-catscoming-1543800.jpg?alt=media&token=a79f599e-13f9-4fb6-90d5-a3a6df157ac6",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
       isHot: false,
@@ -789,7 +805,8 @@ async function main() {
       name: "香蕉巧克力鮮奶油蛋糕",
       slug: "banana-choco-cream-cake",
       description: "香甜香蕉與濃郁巧克力的完美結合。",
-      heroImage: "/images/products/banana-choco.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-dhayaeddart-5276663.jpg?alt=media&token=4ef721a1-a1d5-483a-97fb-d000053892ef",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
       isHot: true,
@@ -811,7 +828,8 @@ async function main() {
       name: "烤杏仁鮮奶油水果蛋糕",
       slug: "almond-fruit-cake",
       description: "烘烤杏仁片香氣濃郁，搭配新鮮水果裝飾。",
-      heroImage: "/images/products/almond-fruit.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-chiecharon-1027811.jpg?alt=media&token=00da7bb9-9b3e-4a97-aa19-b16817777f69",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
       isHot: false,
@@ -830,7 +848,8 @@ async function main() {
       name: "復古櫻桃蛋糕",
       slug: "retro-cherry-cake",
       description: "經典復古造型與濃郁櫻桃風味，重現懷舊時光。",
-      heroImage: "/images/products/cherry-cake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-natalya-choohrova-118638025-9834064.jpg?alt=media&token=ce34ab4d-79fe-43f2-a98a-fa1706ec022a",
       categoryId: classicCakes.id,
       subcategoryId: subSignatureCream?.id ?? null,
       isHot: true,
@@ -853,7 +872,8 @@ async function main() {
       name: "重乳酪蛋糕",
       slug: "baked-cheesecake",
       description: "濃郁厚實，冷凍宅配風味不打折。",
-      heroImage: "/images/products/cheesecake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-angelicabritto-31111197.jpg?alt=media&token=835ba938-3dd6-49a3-bd6d-437bbc2b8e3b",
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
       isHot: false,
@@ -876,7 +896,8 @@ async function main() {
       name: "巧克力布朗尼",
       slug: "chocolate-brownie",
       description: "濃郁可可與堅果香氣的經典布朗尼。",
-      heroImage: "/images/products/brownie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-livilla-latini-1678510737-27850026.jpg?alt=media&token=52dd3574-60f9-4314-821b-9041ba75b37b",
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
       isHot: true,
@@ -898,7 +919,8 @@ async function main() {
       name: "松露生巧克力蛋糕",
       slug: "truffle-choco-cake",
       description: "如松露般濃厚滑順的巧克力風味。",
-      heroImage: "/images/products/truffle-cake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-marta-dzedyshko-1042863-6341572.jpg?alt=media&token=dfbbe5a7-8e11-44de-a628-223f1553f83f",
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
       isHot: false,
@@ -914,32 +936,11 @@ async function main() {
 
   await prisma.product.create({
     data: {
-      name: "巧克力馬卡龍",
-      slug: "chocolate-macaron",
-      description: "法式經典甜點，外脆內軟、香氣濃郁。",
-      heroImage: "/images/products/macaron.jpg",
-      categoryId: classicCakes.id,
-      subcategoryId: subChocolateCakes?.id ?? null,
-      isHot: false,
-      ingredients: "杏仁粉、糖粉、蛋白、可可粉、巧克力甘納許",
-      shelfLife: "冷藏保存3天，冷凍保存7天",
-      flavorProfile:
-        "外層薄脆、內層柔軟濕潤，夾入濃郁巧克力甘納許。甜度高但不膩，香氣馥郁，呈現法式甜點的優雅層次。",
-      productvariant: {
-        create: [
-          { variantName: "6入禮盒", price: 420, isDefault: true },
-          { variantName: "12入禮盒", price: 780 },
-        ],
-      },
-    },
-  });
-
-  await prisma.product.create({
-    data: {
       name: "巧克力慕斯派對杯",
       slug: "choco-mousse-cup",
       description: "滑順慕斯與可可餅乾層的完美結合。",
-      heroImage: "/images/products/mousse-cup.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-ella-olsson-572949-3026810.jpg?alt=media&token=5d482d1d-c993-46c9-b71b-c0e9078730aa",
       categoryId: classicCakes.id,
       subcategoryId: subChocolateCakes?.id ?? null,
       isHot: true,
@@ -959,7 +960,8 @@ async function main() {
       name: "焦糖可可脆片翻糖蛋糕",
       slug: "caramel-choco-fondant-cake",
       description: "金色焦糖與可可脆片裝飾的高級翻糖設計。",
-      heroImage: "/images/products/caramel-fondant.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-javon-swaby-197616-1829423.jpg?alt=media&token=75da8514-d64d-4caa-917c-2e602bbcdc21",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
       isHot: true,
@@ -981,7 +983,8 @@ async function main() {
       name: "花藝婚禮蛋糕",
       slug: "floral-wedding-cake",
       description: "以鮮花裝飾的浪漫婚禮蛋糕，典雅細緻。",
-      heroImage: "/images/products/floral-wedding.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-brent-keane-181485-1702373.jpg?alt=media&token=f2d087f3-cb46-4bd5-ba31-ba96b33123c6",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
       isHot: true,
@@ -1003,7 +1006,8 @@ async function main() {
       name: "粉紅玫瑰奶霜蛋糕",
       slug: "pink-rose-buttercream-cake",
       description: "粉嫩奶霜與玫瑰香氣交織的夢幻設計。",
-      heroImage: "/images/products/rose-cake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-jill-wellington-1638660-433527.jpg?alt=media&token=06f0eec6-6d50-4916-a2a2-9d5be2fd6837",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
       isHot: false,
@@ -1025,7 +1029,8 @@ async function main() {
       name: "楊枝甘露芒果雪崩蛋糕",
       slug: "mango-yangzhi-cake",
       description: "結合港式甜品靈感的創意雪崩蛋糕。",
-      heroImage: "/images/products/mango-yangzhi.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-suki-lee-110686949-15730547.jpg?alt=media&token=0c15c212-49cb-4c50-85b9-890516a077b2",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
       isHot: true,
@@ -1044,7 +1049,8 @@ async function main() {
       name: "柑橘擠花蛋糕",
       slug: "citrus-piping-cake",
       description: "酸甜清新的柑橘風味與擠花奶霜設計。",
-      heroImage: "/images/products/citrus-cake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-catscoming-9419880.jpg?alt=media&token=64250245-ad3f-4265-acdb-c5c2e5527678",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
       isHot: false,
@@ -1063,7 +1069,8 @@ async function main() {
       name: "愛戀草莓心型蛋糕",
       slug: "heart-strawberry-cake",
       description: "浪漫心型造型，滿滿草莓與奶霜的甜蜜滋味。",
-      heroImage: "/images/products/heart-strawberry.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-ph-m-thanh-d-t-1295528-4424640.jpg?alt=media&token=710503fd-4435-4a1b-bf8d-fa1924088889",
       categoryId: classicCakes.id,
       subcategoryId: subArtCakes?.id ?? null,
       isHot: true,
@@ -1083,7 +1090,8 @@ async function main() {
       name: "經典黑巧杯子蛋糕",
       slug: "classic-choco-cupcake",
       description: "濃郁可可風味與柔軟蛋糕體的經典款。",
-      heroImage: "/images/products/classic-cupcake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-guvo59-20731156.jpg?alt=media&token=8e0224bd-c76e-4b09-b324-130559ba55df",
       categoryId: classicCakes.id,
       subcategoryId: subCupcakes?.id ?? null,
       isHot: true,
@@ -1105,7 +1113,8 @@ async function main() {
       name: "提拉米蘇杯子蛋糕",
       slug: "tiramisu-cupcake",
       description: "將提拉米蘇濃郁風味融入杯子蛋糕中。",
-      heroImage: "/images/products/tiramisu-cupcake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-dogu-tuncer-339534179-16134541.jpg?alt=media&token=6877e2ed-47e9-4db1-b4d7-4bf815e44fd1",
       categoryId: classicCakes.id,
       subcategoryId: subCupcakes?.id ?? null,
       isHot: false,
@@ -1121,10 +1130,11 @@ async function main() {
 
   await prisma.product.create({
     data: {
-      name: "愛心擠花杯子蛋糕",
+      name: "粉紅愛心擠花杯子蛋糕",
       slug: "heart-piping-cupcake",
-      description: "粉嫩愛心擠花造型，節日限定甜點。",
-      heroImage: "/images/products/heart-cupcake.jpg",
+      description: "粉嫩愛心擠花造型，情人節限定甜點。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-saveurssecretes-6815973.jpg?alt=media&token=4664bbd6-35f0-4126-acd4-dc4ec8869508",
       categoryId: classicCakes.id,
       subcategoryId: subCupcakes?.id ?? null,
       isHot: true,
@@ -1143,7 +1153,8 @@ async function main() {
       name: "玫瑰造型杯子蛋糕",
       slug: "rose-cupcake",
       description: "以玫瑰花形奶霜裝飾的浪漫甜點。",
-      heroImage: "/images/products/rose-cupcake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-lukato-8874017.jpg?alt=media&token=264e5f93-d971-4e6c-9e87-ba34e7d779bf",
       categoryId: classicCakes.id,
       subcategoryId: subCupcakes?.id ?? null,
       isHot: false,
@@ -1162,7 +1173,8 @@ async function main() {
       name: "聖誕樹造型杯子蛋糕",
       slug: "christmas-tree-cupcake",
       description: "聖誕限定款，以奶霜堆疊成可愛聖誕樹造型。",
-      heroImage: "/images/products/xmas-cupcake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-tim-douglas-6210740.jpg?alt=media&token=7a0d0484-ad7d-4161-997f-454e7d2eba09",
       categoryId: classicCakes.id,
       subcategoryId: subCupcakes?.id ?? null,
       isHot: true,
@@ -1181,7 +1193,8 @@ async function main() {
       name: "草莓紅絲絨杯子蛋糕",
       slug: "red-velvet-cupcake",
       description: "鮮紅蛋糕體搭配草莓奶霜，經典美式風格。",
-      heroImage: "/images/products/red-velvet-cupcake.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-rawan-ali-133113257-28122547.jpg?alt=media&token=71d8cd86-b4d9-47f1-9c92-f414a9be79d2",
       categoryId: classicCakes.id,
       subcategoryId: subCupcakes?.id ?? null,
       isHot: false,
@@ -1201,7 +1214,8 @@ async function main() {
       name: "軟心巧克力餅乾",
       slug: "soft-choco-cookie",
       description: "美式經典軟餅乾，濃郁巧克力。",
-      heroImage: "/images/products/soft-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-razaneadra-14136384.jpg?alt=media&token=16aa6dec-ed03-45e8-9d56-e59852129d39",
       categoryId: handmadeCookies.id,
       subcategoryId: subSoftCookies?.id ?? null,
       isHot: false,
@@ -1221,7 +1235,8 @@ async function main() {
       name: "可可豆曲奇",
       slug: "cocoa-cookie",
       description: "入口即化，濃郁可可香。",
-      heroImage: "/images/products/cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-louai-benzaoui-435435842-20653559.jpg?alt=media&token=e22e62d7-7d93-4d0b-88b3-8df677a43b4f",
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
       isHot: true,
@@ -1244,7 +1259,8 @@ async function main() {
       name: "小山園抹茶曲奇",
       slug: "matcha-hk-cookie",
       description: "濃郁抹茶香氣，酥鬆可口。",
-      heroImage: "/images/products/matcha-hk-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-catscoming-771455.jpg?alt=media&token=6cbb51aa-4ecb-4ea5-beb8-8328f50c934a",
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
       isHot: false,
@@ -1266,7 +1282,8 @@ async function main() {
       name: "聖誕樹翻糖餅乾",
       slug: "xmas-fondant-cookie",
       description: "聖誕節限定款，繽紛翻糖造型餅乾。",
-      heroImage: "/images/products/xmas-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-ekaterina-bolovtsova-5702693.jpg?alt=media&token=a567f3d6-ed18-453f-97ad-2ec71c267452",
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
       isHot: true,
@@ -1288,7 +1305,8 @@ async function main() {
       name: "焦糖奶油曲奇",
       slug: "caramel-cookie",
       description: "香濃焦糖與奶油香氣完美融合。",
-      heroImage: "/images/products/caramel-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-catscoming-785420.jpg?alt=media&token=e64b95e9-4556-47b8-8c8b-9f0ca15f1a1f",
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
       isHot: false,
@@ -1310,7 +1328,8 @@ async function main() {
       name: "酸甜蔓越莓曲奇",
       slug: "cranberry-cookie",
       description: "蔓越莓果乾點綴其中，酸甜清爽。",
-      heroImage: "/images/products/cranberry-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-meggy-kadam-aryanto-3797063-9620137.jpg?alt=media&token=ad217d1f-e3fb-41a1-8878-74d02f52e1f5",
       categoryId: handmadeCookies.id,
       subcategoryId: subHkCookies?.id ?? null,
       isHot: true,
@@ -1333,7 +1352,8 @@ async function main() {
       name: "抹茶白巧愛心軟餅乾",
       slug: "matcha-white-choco-cookie",
       description: "清新抹茶香氣，搭配香濃白巧克力。",
-      heroImage: "/images/products/matcha-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-darlene-alderson-7016489.jpg?alt=media&token=96ff1014-bfd1-402f-9591-2ebb27286283",
       categoryId: handmadeCookies.id,
       subcategoryId: subSoftCookies?.id ?? null,
       isHot: false,
@@ -1355,7 +1375,8 @@ async function main() {
       name: "玫瑰白巧愛心軟餅乾",
       slug: "rose-white-choco-cookie",
       description: "浪漫玫瑰香氣與白巧克力的夢幻組合。",
-      heroImage: "/images/products/rose-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-jill-wellington-1638660-6814664.jpg?alt=media&token=6a126192-2884-4fa6-9332-7cf1579d042f",
       categoryId: handmadeCookies.id,
       subcategoryId: subSoftCookies?.id ?? null,
       isHot: true,
@@ -1377,7 +1398,8 @@ async function main() {
       name: "堅果燕麥軟餅乾",
       slug: "oat-nut-cookie",
       description: "香脆堅果與燕麥結合，口感豐富又健康。",
-      heroImage: "/images/products/oat-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-meraki-photos-3596636-5379521.jpg?alt=media&token=0e75950b-0ef6-47a6-aaac-41e6df1097dd",
       categoryId: handmadeCookies.id,
       subcategoryId: subSoftCookies?.id ?? null,
       isHot: false,
@@ -1399,7 +1421,8 @@ async function main() {
       name: "香濃花生巧克力軟餅乾",
       slug: "peanut-choco-cookie",
       description: "濃郁花生與黑巧克力雙重香氣。",
-      heroImage: "/images/products/peanut-cookie.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-tiago-antonio-530108832-28786988.jpg?alt=media&token=944aa2bd-84de-4fd4-bb32-88f4a936d039",
       categoryId: handmadeCookies.id,
       subcategoryId: subSoftCookies?.id ?? null,
       isHot: true,
@@ -1422,7 +1445,8 @@ async function main() {
       name: "香草雪球餅乾",
       slug: "snowball-cookie",
       description: "酥鬆口感，甜而不膩。",
-      heroImage: "/images/products/snowball.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-ella-olsson-572949-3026811.jpg?alt=media&token=956d6191-533e-463f-ad35-4dfd549b5964",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
       isHot: false,
@@ -1442,7 +1466,8 @@ async function main() {
       name: "黑可可雪球餅乾",
       slug: "dark-cocoa-snowball",
       description: "濃郁黑可可香氣，外酥內鬆的雪球口感。",
-      heroImage: "/images/products/dark-cocoa-snowball.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-melissa-huntsman-23514224-6661117.jpg?alt=media&token=9fea4132-22a8-4891-92a7-c1b9414e974e",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
       isHot: false,
@@ -1464,7 +1489,8 @@ async function main() {
       name: "小山園抹茶雪球餅乾",
       slug: "matcha-snowball",
       description: "清新抹茶香氣、口感酥鬆綿密。",
-      heroImage: "/images/products/matcha-snowball.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-alesiakozik-6546570.jpg?alt=media&token=a8fbf711-a6d6-4720-b4b5-fa9ecff90910",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
       isHot: true,
@@ -1486,7 +1512,8 @@ async function main() {
       name: "法式椰絲雪球餅乾",
       slug: "coconut-snowball",
       description: "滿滿椰絲香氣的異國風雪球餅乾。",
-      heroImage: "/images/products/coconut-snowball.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-melissa-huntsman-23514224-6661118.jpg?alt=media&token=ec6ed132-de3f-4228-b8aa-beb1193899fe",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
       isHot: false,
@@ -1508,7 +1535,8 @@ async function main() {
       name: "焦糖雪球餅乾",
       slug: "caramel-snowball",
       description: "焦糖香氣濃郁、入口即化的雪球餅乾。",
-      heroImage: "/images/products/caramel-snowball.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-cphbythea-5604808.jpg?alt=media&token=8f1ef590-c3fa-4b21-8625-fbc8647b690c",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
       isHot: true,
@@ -1530,7 +1558,8 @@ async function main() {
       name: "黃檸檬雪球餅乾",
       slug: "lemon-snowball",
       description: "清新檸檬皮香氣，爽口不甜膩。",
-      heroImage: "/images/products/lemon-snowball.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-melissa-huntsman-23514224-6661118.jpg?alt=media&token=ec6ed132-de3f-4228-b8aa-beb1193899fe",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
       isHot: false,
@@ -1552,7 +1581,8 @@ async function main() {
       name: "櫻花白巧克力雪球餅乾",
       slug: "sakura-whitechoco-snowball",
       description: "粉嫩櫻花與白巧克力融合的浪漫滋味。",
-      heroImage: "/images/products/sakura-snowball.jpg",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-daria86-8306609.jpg?alt=media&token=d87ab781-6ae4-4746-9387-7536635916a2",
       categoryId: handmadeCookies.id,
       subcategoryId: subSnowballCookies?.id ?? null,
       isHot: true,
@@ -1569,6 +1599,433 @@ async function main() {
     },
   });
 
+  await prisma.product.create({
+    data: {
+      name: "玫瑰花茶馬卡龍",
+      slug: "rose-tea-macaron",
+      description: "玫瑰花香與奶香交織的浪漫滋味。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-jill-wellington-1638660-3776939.jpg?alt=media&token=ad0f6e7e-2f64-4bc4-a9ec-3f2c8fe2dc51",
+      categoryId: macarons.id,
+      subcategoryId: subTeaMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、奶油霜、玫瑰花瓣、花茶粉",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "以玫瑰花茶粉與奶油霜調和，香氣柔和優雅。外層酥脆、內餡滑順，口感細緻夢幻。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "桂花荔枝馬卡龍",
+      slug: "osmanthus-lychee-macaron",
+      description: "荔枝果香融合桂花清香，清新雅緻。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-valeriya-7474225.jpg?alt=media&token=c4278135-f5e3-4402-89c2-c66ec99e9530",
+      categoryId: macarons.id,
+      subcategoryId: subTeaMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、荔枝果泥、桂花糖漿",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "清新的桂花香氣搭配荔枝果泥內餡，甜而不膩。香氣層次豐富，口感柔和。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "薰衣草茶馬卡龍",
+      slug: "lavender-macaron",
+      description: "淡淡薰衣草香氣，帶來寧靜的甜味。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-jill-wellington-1638660-3776947.jpg?alt=media&token=508d9045-96ae-4286-9692-4a868c157877",
+      categoryId: macarons.id,
+      subcategoryId: subTeaMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、奶油霜、薰衣草花瓣",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "加入法國乾燥薰衣草花瓣與香草奶霜，甜度柔和，香氣清新，是大人味的優雅甜點。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "粉紅櫻花馬卡龍",
+      slug: "sakura-macaron",
+      description: "粉嫩櫻花香氣，春季限定款。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-valeriya-7474292.jpg?alt=media&token=41195c10-4632-42fb-9d49-09907c36e7a3",
+      categoryId: macarons.id,
+      subcategoryId: subTeaMacarons.id,
+      isHot: true,
+      ingredients: "杏仁粉、糖粉、蛋白、奶油霜、櫻花粉、鹽漬櫻花",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "以櫻花粉與奶霜調和，甜中帶花香。外觀粉嫩可愛，帶有春日氛圍感。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 190, isDefault: true },
+          { variantName: "6入組", price: 360 },
+          { variantName: "12入禮盒", price: 680 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "藍伯爵馬卡龍",
+      slug: "earlgrey-macaron",
+      description: "濃郁伯爵茶香與奶香完美融合。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-tamanna-rumee-52377920-30411004.jpg?alt=media&token=17300543-9193-43d3-9e6c-b69a3e339c66",
+      categoryId: macarons.id,
+      subcategoryId: subTeaMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、奶油霜、伯爵茶葉粉",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "以伯爵紅茶粉與奶油霜融合，香氣高雅、茶味濃郁，是最受歡迎的茶香口味之一。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "凍頂烏龍茶馬卡龍",
+      slug: "oolong-macaron",
+      description: "茶香濃厚、尾韻回甘的台灣風味。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-mariah-green-3624629-5423257.jpg?alt=media&token=d4d3ed3b-c709-4cbb-b23b-f13851996b4b",
+      categoryId: macarons.id,
+      subcategoryId: subTeaMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、奶油霜、烏龍茶粉",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "選用南投凍頂烏龍茶粉製作，香氣濃郁、帶花香與蜜韻。融合奶霜後滑順香醇。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "黃檸檬馬卡龍",
+      slug: "lemon-macaron",
+      description: "清新檸檬香氣與酸甜奶霜交織。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-marta-dzedyshko-1042863-7597264.jpg?alt=media&token=5fbdfeeb-5612-4127-9309-2069637d8448",
+      categoryId: macarons.id,
+      subcategoryId: subFruitMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、檸檬汁、檸檬皮、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "帶有自然檸檬酸香與滑順奶霜的平衡風味，甜中帶酸、香氣清新。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "覆盆莓馬卡龍",
+      slug: "raspberry-macaron",
+      description: "酸甜覆盆莓果餡，色澤鮮豔。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-isaw-company-66472-1005405.jpg?alt=media&token=1f667bfd-53fe-4f2c-af17-705b74ce2408",
+      categoryId: macarons.id,
+      subcategoryId: subFruitMacarons.id,
+      isHot: true,
+      ingredients: "杏仁粉、糖粉、蛋白、覆盆莓泥、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile: "酸甜濃郁的覆盆莓果香與奶霜結合，甜度剛好，顏色粉嫩可愛。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "草莓馬卡龍",
+      slug: "strawberry-macaron",
+      description: "經典草莓風味，香氣甜美。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-nonik-yench-3589897-5720907.jpg?alt=media&token=4c2c733e-be00-4433-9c53-175550274d74",
+      categoryId: macarons.id,
+      subcategoryId: subFruitMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、草莓果泥、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile: "使用新鮮草莓泥製成內餡，酸甜平衡，果香自然。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "椰香馬卡龍",
+      slug: "coconut-macaron",
+      description: "香甜椰奶風味，異國風情。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-mariah-green-3624629-5423254.jpg?alt=media&token=2b93ba96-ce6f-48de-b049-c214ede80406",
+      categoryId: macarons.id,
+      subcategoryId: subFruitMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、椰奶、椰絲、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile: "椰奶與椰絲交織出柔滑甜香，熱帶風味濃厚。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "萊姆薄荷馬卡龍",
+      slug: "lime-mint-macaron",
+      description: "微酸萊姆與清涼薄荷的清爽組合。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-valeriya-8625945.jpg?alt=media&token=0106ae2f-74e2-4769-b607-f6dfb564f737",
+      categoryId: macarons.id,
+      subcategoryId: subFruitMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、萊姆汁、薄荷葉、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile: "清新酸甜、尾韻帶薄荷涼感，夏季限定的消暑口味。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "藍莓馬卡龍",
+      slug: "blueberry-macaron",
+      description: "深藍莓果香濃郁，微酸甜味平衡。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-valeriya-7474246.jpg?alt=media&token=54bc363e-99b4-48a5-9cac-b7359513534a",
+      categoryId: macarons.id,
+      subcategoryId: subFruitMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、藍莓泥、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile: "藍莓果香濃郁，甜中帶酸，整體香氣清爽層次豐富。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "70%巧克力馬卡龍",
+      slug: "dark-chocolate-macaron",
+      description: "濃郁可可風味、微苦中帶甜。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-mohaned-tamzini-686673207-28144834.jpg?alt=media&token=30f77358-0b6c-4de7-9867-242bd1f0b15d",
+      categoryId: macarons.id,
+      subcategoryId: subClassicMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、黑巧克力、鮮奶油",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile: "使用70%比利時黑巧克力製成內餡，苦甜平衡、香氣厚實。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 190, isDefault: true },
+          { variantName: "6入組", price: 360 },
+          { variantName: "12入禮盒", price: 680 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "焦糖巧克力馬卡龍",
+      slug: "caramel-choco-macaron",
+      description: "焦糖香氣與可可融合的柔滑甜點。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-nietjuhart-30173364%20(1).jpg?alt=media&token=38817522-e264-4594-8a3e-7a373b089cdb",
+      categoryId: macarons.id,
+      subcategoryId: subClassicMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、焦糖醬、黑巧克力、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile: "濃郁巧克力與焦糖交織的香氣豐富、口感滑順甜中帶苦。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 190, isDefault: true },
+          { variantName: "6入組", price: 360 },
+          { variantName: "12入禮盒", price: 680 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "經典香草馬卡龍",
+      slug: "vanilla-macaron",
+      description: "純淨香草香氣，最原始的法式風味。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-roman-odintsov-6798407.jpg?alt=media&token=7a7d6932-4680-4cac-afdb-c6bc1ae951f9",
+      categoryId: macarons.id,
+      subcategoryId: subClassicMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、香草豆莢、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "使用天然香草豆莢製作，甜度柔和、香氣高雅，是最經典的法式風味。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "深焙咖啡馬卡龍",
+      slug: "coffee-macaron",
+      description: "濃厚咖啡香氣、苦甜平衡。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-nietjuhart-29716034.jpg?alt=media&token=44350c54-2a5f-463d-90a3-087bcca12772",
+      categoryId: macarons.id,
+      subcategoryId: subClassicMacarons.id,
+      ingredients: "杏仁粉、糖粉、蛋白、深焙咖啡粉、奶油霜",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "使用深焙咖啡豆製成咖啡醬，苦香濃郁、尾韻滑順，是大人味首選。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 180, isDefault: true },
+          { variantName: "6入組", price: 340 },
+          { variantName: "12入禮盒", price: 640 },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "提拉米蘇馬卡龍",
+      slug: "tiramisu-macaron",
+      description: "融合可可與咖啡的經典義式風味。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-nishant-sharma-77755298-10249463.jpg?alt=media&token=6dc76964-8882-450f-b3ca-f5cfeb1d095c",
+      categoryId: macarons.id,
+      subcategoryId: subClassicMacarons.id,
+      isHot: true,
+      ingredients: "杏仁粉、糖粉、蛋白、馬斯卡彭乳酪、咖啡液、可可粉",
+      shelfLife: "冷藏保存3天，冷凍保存7天",
+      flavorProfile:
+        "以馬斯卡彭乳酪與咖啡製作內餡，濃郁滑順，甜度平衡，是人氣經典款。",
+      productvariant: {
+        create: [
+          { variantName: "3入組", price: 190, isDefault: true },
+          { variantName: "6入組", price: 360 },
+          { variantName: "12入禮盒", price: 680 },
+        ],
+      },
+    },
+  });
+
+  // 建立首頁 Banner
+  console.log("Creating banners...");
+
+  await prisma.banners.createMany({
+    data: [
+      {
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fbanner%2Fb4.jpg?alt=media&token=61e2e3ff-2028-48e2-94b2-788ef1ef2452",
+        title: "濃醇登場・生巧克力系列",
+        buttonText: "探索更多",
+        buttonLink: "/products/classic-cakes/chocolate-cakes",
+        fontColor: "light",
+      },
+      {
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fbanner%2Fb2.jpg?alt=media&token=14c41356-4b11-4ff5-9ab1-63c3982f5b50",
+        title: "繽紛馬卡龍・法式下午茶首選",
+        buttonText: "前往選購",
+        buttonLink: "/products/macarons/tea-macarons",
+        fontColor: "dark",
+      },
+      {
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fbanner%2Fb3.jpg?alt=media&token=7a129591-a0d2-42f5-9b36-807621f167dc",
+        title: "週末野餐甜點盒・幸福出發",
+        buttonText: "立即訂購",
+        buttonLink: "/products/cookies/soft-cookies",
+        fontColor: "dark",
+      },
+      {
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fbanner%2Fb5.jpg?alt=media&token=592d5d47-7b8e-4655-90db-90862990ee9f",
+        title: "香氣綻放・生乳酪蛋糕",
+        buttonText: "看更多口味",
+        buttonLink: "/products/classic-cakes/baked-cheesecake",
+        fontColor: "light",
+      },
+    ],
+  });
+
   // 最新消息
   console.log("Creating news...");
   await prisma.news.createMany({
@@ -1578,21 +2035,24 @@ async function main() {
         content:
           "母親節即將來臨，為媽媽準備一份特別的驚喜吧！我們的限定蛋糕將於4月中開始預購，數量有限，敬請提前預定。",
         date: new Date("2024-04-15"),
-        image: null,
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fnews%2Fpexels-george-dolgikh-551816-2072171.jpg?alt=media&token=9cac337b-160a-4f04-b860-9346526dcb76",
       },
       {
         title: "情人節送禮首選生巧克力禮盒",
         content:
           "香濃手工生巧克力，最適合在2月與心愛的人分享。限量禮盒，2月初正式開賣！",
         date: new Date("2024-02-01"),
-        image: null,
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fnews%2Fpexels-goumbik-352782.jpg?alt=media&token=a5d437e2-5ab1-411d-8fa7-b85655b2c4b3",
       },
       {
         title: "仲夏綠葡萄千層新上市！",
         content:
           "盛夏限定甜點—清爽的綠葡萄千層蛋糕，酸甜滋味絕對讓你難忘！3月起於全門市供應。",
         date: new Date("2024-03-01"),
-        image: null,
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fnews%2Fpexels-karolina-grabowska-4996964.jpg?alt=media&token=24e6ddeb-3d48-4218-a298-8325c4ac6ef7",
       },
     ],
   });
@@ -1618,23 +2078,57 @@ async function main() {
     ],
   });
 
-  // 加價購商品
+  // --- 加價購商品 ---
   console.log("Creating addon products...");
-  await prisma.addon_product.createMany({
-    data: [
-      {
-        name: "品牌紙袋",
-        price: 15.0,
-        imageUrl: "/images/addons/bag.jpg",
-        status: true,
+
+  await prisma.product.create({
+    data: {
+      name: "禮盒包裝",
+      slug: "addon-gift-box",
+      categoryId: macarons.id, // 可放任意一個現有分類
+      subcategoryId: subClassicMacarons.id, // 同樣屬於現有子分類
+      description: "精美禮盒包裝，適合送禮。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-chwastek-83016-256040.jpg?alt=media&token=975f75d7-73b0-4647-92e0-cf116fdc6eb9",
+      isAddon: true,
+      isVisible: false,
+      isHot: false,
+      status: true,
+      productvariant: {
+        create: [
+          {
+            variantName: "基本款",
+            price: 85,
+            isDefault: true,
+          },
+        ],
       },
-      {
-        name: "精裝禮盒",
-        price: 75.0,
-        imageUrl: "/images/addons/woodbox.jpg",
-        status: true,
+    },
+  });
+
+  await prisma.product.create({
+    data: {
+      name: "品牌手提袋",
+      slug: "addon-bag",
+      categoryId: macarons.id,
+      subcategoryId: subClassicMacarons.id,
+      description: "環保紙提袋，搭配甜點更體面。",
+      heroImage:
+        "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fproducts%2Fpexels-angela-roma-7319110.jpg?alt=media&token=c99f7fc0-9135-4761-a68f-f362aa3a8b4f",
+      isAddon: true,
+      isVisible: false,
+      isHot: false,
+      status: true,
+      productvariant: {
+        create: [
+          {
+            variantName: "基本款",
+            price: 25,
+            isDefault: true,
+          },
+        ],
       },
-    ],
+    },
   });
 
   console.log("Seed completed successfully.");

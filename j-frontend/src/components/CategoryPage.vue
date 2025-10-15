@@ -91,10 +91,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch, computed, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { smoothScrollTo } from "../composables/useSmoothScroll.js";
-
+import { usePageMeta } from "../composables/usePageMeta";
 
 const props = defineProps({
   title: String,                // 頁面標題
@@ -154,6 +154,21 @@ const fetchCategories = async () => {
   categories.value = data;
 };
 
+const title = ref("甜點系列");
+const description = ref("");
+usePageMeta({ title, description });
+
+// 當分類載入完時自動更新 meta
+watchEffect(() => {
+  if (activeCategory.value) {
+    title.value = activeCategory.value.name; // 不加「｜娟姐烘焙坊」，由 usePageMeta 自動補
+    description.value = activeCategory.value.description;
+  } else if (route.params.categorySlug === "top10") {
+    title.value = "暢銷 TOP10";
+    description.value = "人氣熱銷排行！看看大家都愛吃什麼甜點。";
+  }
+});
+
 // 依目前大分類載入每個子分類的 items
 const loadItemsForActiveCategory = async () => {
   const slug = route.params.categorySlug;
@@ -166,9 +181,18 @@ const loadItemsForActiveCategory = async () => {
   } else {
     const bySub = {};
     for (const sub of activeSubcategories.value) {
-      bySub[sub.id] = await fetchJSON(`${API_URL}${props.subcategoryApi}/${sub.id}/${props.itemApi}`);
+      let data = await fetchJSON(
+        `${API_URL}${props.subcategoryApi}/${sub.id}/${props.itemApi}`
+      );
+      // 如果是商品頁，就過濾掉 isAddon 商品
+      if (props.itemApi === "products") {
+        data = data.filter(item => !item.isAddon);
+      }
+
+      bySub[sub.id] = data;
     }
     itemsBySub.value = bySub;
+
   }
 
  // 若網址帶 hash（或切換分類後仍保留 hash），平滑捲動到錨點

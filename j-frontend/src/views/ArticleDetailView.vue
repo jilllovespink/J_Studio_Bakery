@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
 import ArticleToc from "../components/Article/ArticleToc.vue";
 import ArticleCard from "../components/ArticleCard.vue";
@@ -139,4 +139,12 @@ const fetchRelatedArticles = async (catId) => {
 };
 
 onMounted(fetchArticle);
+
+watch(
+  () => route.params.slug,
+  () => {
+    fetchArticle();
+    window.scrollTo({ top: 0, behavior: "smooth" }); // optional：切換時回頂部
+  }
+);
 </script>

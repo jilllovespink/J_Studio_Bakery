@@ -8,10 +8,15 @@
         :key="addon.id"
         class="border rounded p-4 flex flex-col items-center"
       >
-        <img :src="addon.imageUrl" alt="" class="w-24 h-24 object-cover mb-2" />
+        <img
+          :src="addon.heroImage"
+          class="w-24 h-24 object-cover mb-2 rounded"
+        />
         <p class="font-medium">{{ addon.name }}</p>
-        <p class="text-gray-600">NT$ {{ addon.price }}</p>
-        <button @click="addAddon(addon)" class="btn btn-secondary mt-3">
+        <p class="text-gray-600">
+          NT$ {{ addon.productvariant?.[0]?.price || '-' }}
+        </p>
+        <button @click="addAddonToCart(addon)" class="btn btn-secondary mt-3">
           加入購物車
         </button>
       </div>
@@ -27,12 +32,24 @@ import { useCartStore } from "../../stores/cartStore";
 const addons = ref([]);
 const cart = useCartStore();
 
+// 取得加價購清單
 onMounted(async () => {
-  const res = await api.get("/addons");
-  addons.value = res.data;
+  try {
+    const res = await api.get("/products?isAddon=true");
+    addons.value = res.data;
+  } catch (err) {
+    console.error("載入加價購資料失敗：", err);
+  }
 });
 
-function addAddon(addon) {
-  cart.addToCart(addon.id, 1); // 直接呼叫購物車 store
+// 加入購物車（呼叫後端 /cart/addon）
+async function addAddonToCart(addon) {
+  try {
+       const variantId = addon.productvariant?.[0]?.id;
+    if (!variantId) throw new Error("找不到加價購商品的 variant");
+    await cart.addToCart(variantId, 1);
+  } catch (err) {
+    console.error("加入加價購失敗：", err);
+  }
 }
 </script>

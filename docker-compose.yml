@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   j-frontend:
     image: j-frontend
@@ -9,6 +11,10 @@ services:
     volumes:
       - ./j-frontend:/app
       - node_modules_docker:/app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
 volumes:
   node_modules_docker:

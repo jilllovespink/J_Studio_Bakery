@@ -9,7 +9,11 @@
       class="flex items-center justify-between border-b py-4"
     >
       <div class="flex items-center space-x-4">
-        <img :src="item.image" alt="" class="w-20 h-20 object-cover rounded" />
+        <img
+          :src="item.productImg"
+          alt=""
+          class="w-20 h-20 object-cover rounded"
+        />
         <div>
           <p class="font-medium">
             {{ item.productName }} - {{ item.variantName }}
@@ -20,11 +24,17 @@
 
       <!-- 數量調整 -->
       <div class="flex items-center space-x-2">
-        <button @click="decrease(item)" class="px-3 py-1 border rounded">
+        <button
+          @click="decrease(item)"
+          class="px-3 py-1 border rounded-lg transition-all duration-200 hover:bg-[color:var(--color-primary)] hover:text-white"
+        >
           -
         </button>
         <span>{{ item.quantity }}</span>
-        <button @click="increase(item)" class="px-3 py-1 border rounded">
+        <button
+          @click="increase(item)"
+          class="px-3 py-1 border rounded-lg transition-all duration-200 hover:bg-[color:var(--color-primary)] hover:text-white"
+        >
           +
         </button>
       </div>
@@ -33,7 +43,12 @@
       <p class="font-semibold">NT$ {{ item.price * item.quantity }}</p>
 
       <!-- 移除 -->
-      <button @click="remove(item)" class="text-red-500">刪除</button>
+      <button
+        @click="remove(item)"
+        class="text-[color:var(--color-destructive)] transition-all duration-200 hover:text-white hover:bg-[color:var(--color-destructive)] hover:shadow px-3 py-1 rounded-lg"
+      >
+        刪除
+      </button>
     </div>
 
     <!-- 折扣碼 -->

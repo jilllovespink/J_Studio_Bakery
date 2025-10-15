@@ -35,6 +35,7 @@
 
     <!-- 閱讀更多 -->
     <RouterLink
+      :key="$route.fullPath"
       :to="{ name: 'articleDetail', params: { slug: article.slug } }"
       class="mt-4 text-primary font-medium hover:underline"
     >

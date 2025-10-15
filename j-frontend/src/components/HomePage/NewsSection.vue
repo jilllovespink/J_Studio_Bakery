@@ -1,5 +1,5 @@
 <template>
-  <section class="py-16 bg-white">
+  <section class="py-16 bg-background">
     <div class="text-center mb-12">
       <h2 class="text-3xl font-bold">最新消息</h2>
       <p class="text-muted-foreground mt-2">掌握最新的甜點資訊與烘焙活動</p>

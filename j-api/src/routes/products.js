@@ -5,6 +5,52 @@ const r = express.Router();
 
 console.log("Loaded products.js from:", import.meta.url);
 
+// --- 全部商品，可帶 isAddon 篩選 ---
+// GET /api/products?isAddon=true
+r.get("/", async (req, res) => {
+  try {
+    const { isAddon, isVisible } = req.query;
+
+    const where = {};
+    // ✅ 根據參數動態篩選
+    if (isAddon === "true") where.isAddon = true;
+    if (isAddon === "false") where.isAddon = false;
+
+    // 可選參數：只抓顯示商品
+    if (isVisible === "true") where.isVisible = true;
+
+    const products = await prisma.product.findMany({
+      where,
+      include: {
+        productvariant: { orderBy: { price: "asc" } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    // 整理回傳資料（含變體資訊）
+    const mapped = products.map((p) => ({
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      description: p.description,
+      heroImage: p.heroImage,
+      isAddon: p.isAddon,
+      isVisible: p.isVisible,
+      productvariant: p.productvariant.map((v) => ({
+        id: v.id,
+        variantName: v.variantName,
+        price: Number(v.price),
+        isDefault: v.isDefault,
+      })),
+    }));
+
+    res.json(mapped);
+  } catch (err) {
+    console.error("Failed to fetch products (general):", err);
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+
 // 熱門商品
 // GET /api/products/hot
 r.get("/hot", async (req, res) => {

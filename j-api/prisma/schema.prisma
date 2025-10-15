@@ -33,7 +33,7 @@ model Article {
   slug          String   @unique
   excerpt       String
   content       String   @db.Text
-  coverImageUrl String?
+  coverImageUrl String?  @db.Text
   publishedAt   DateTime @default(now())
   categoryId    Int
   subCategoryId Int
@@ -41,18 +41,10 @@ model Article {
   subcategory   ArticleSubCategory @relation(fields: [subCategoryId], references: [id])
 }
 
-model addon_product {
-  id       Int     @id @default(autoincrement())
-  name     String
-  price    Decimal @db.Decimal(10,2)
-  imageUrl String? @db.VarChar(1000)
-  status   Boolean @default(true)  // 上架/下架
-  createdAt DateTime @default(now())
-}
 
 model banners {
   id         Int                @id @default(autoincrement())
-  image      String             @db.VarChar(255)
+  image      String?            @db.Text
   title      String             @db.VarChar(100)
   buttonText String?            @db.VarChar(50)
   buttonLink String?            @db.VarChar(255)
@@ -147,9 +139,10 @@ model product {
   categoryId     Int
   subcategory    product_subcategory? @relation(fields: [subcategoryId], references: [id])
   subcategoryId  Int?
-
+  isAddon        Boolean              @default(false)
+  isVisible      Boolean              @default(true)
   description    String?              @db.Text
-  heroImage      String?              @db.VarChar(10000)
+  heroImage      String?              @db.Text
   status         Boolean              @default(true)
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
