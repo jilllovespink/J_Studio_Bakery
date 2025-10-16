@@ -29,6 +29,8 @@ app.use(
       "http://localhost:5173",
       "https://juany-studio.zeabur.app", // 前端正式網址
     ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // 允許攜帶 cookie
   })
 );
