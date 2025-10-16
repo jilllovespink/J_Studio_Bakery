@@ -25,7 +25,10 @@ const app = express();
 // 啟用 CORS，允許前端 (http://localhost:5173) 帶 cookie
 app.use(
   cors({
-    origin: "http://localhost:5173", // 你的 Vue 前端開發伺服器
+    origin: [
+      "http://localhost:5173",
+      "https://juany-studio.zeabur.app", // 前端正式網址
+    ],
     credentials: true, // 允許攜帶 cookie
   })
 );
