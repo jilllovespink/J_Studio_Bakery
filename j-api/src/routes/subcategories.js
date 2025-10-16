@@ -8,7 +8,12 @@ router.get("/:id/products", async (req, res) => {
   try {
     const { id } = req.params;
     const products = await prisma.product.findMany({
-      where: { subcategoryId: Number(id) },
+      where: {
+        subcategoryId: Number(id),
+        status: true, // 僅顯示上架商品
+        isVisible: true, // 僅顯示可見商品
+        isAddon: false,
+      },
       select: {
         id: true,
         name: true,
@@ -16,6 +21,7 @@ router.get("/:id/products", async (req, res) => {
         description: true,
         heroImage: true,
         isHot: true,
+        isAddon: true,
         productvariant: {
           select: {
             id: true,

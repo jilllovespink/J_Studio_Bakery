@@ -1,6 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+// 防呆機制：檢查資料表是否已有資料
+const existingProducts = await prisma.product.count();
+const existingCategories = await prisma.category.count();
+
+if (existingProducts > 0 || existingCategories > 0) {
+  console.log(chalk.yellow("⚠️  資料庫已有內容，跳過 seeding。"));
+  return;
+}
+
 async function main() {
   console.log("Start seeding...");
 
