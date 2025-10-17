@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { prisma } from "../prisma.js";
+import { verifyToken } from "../middlewares/auth.js";
 
 const r = Router();
 
@@ -33,9 +34,22 @@ async function generateOrderNo() {
 }
 
 // --- 建立訂單 ---
-r.post("/", async (req, res) => {
+r.post("/", verifyToken, async (req, res) => {
   try {
-    const { buyer, shippingMethod, items, paymentMethod } = req.body;
+    const { buyer, shippingMethod, paymentMethod } = req.body;
+    const guestId = req.user.guestId;
+
+    //  取得購物車
+    const cart = await prisma.cart.findUnique({
+      where: { guestId },
+      include: { items: true },
+    });
+
+    if (!cart || cart.items.length === 0) {
+      return res
+        .status(400)
+        .json({ error: { code: "EMPTY_CART", message: "購物車是空的" } });
+    }
 
     // 簡單驗證
     if (!buyer?.name || !buyer?.email || !buyer?.phone) {
@@ -48,28 +62,25 @@ r.post("/", async (req, res) => {
         error: { code: "INVALID_SHIPPING", message: "運送方式不正確" },
       });
     }
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({
-        error: { code: "NO_ITEMS", message: "訂單必須包含至少一項商品" },
-      });
-    }
 
     // 小計
-    const subtotal = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
+    const subtotal = cart.items.reduce(
+      (sum, it) => sum + it.price * it.quantity,
+      0
+    );
+
+    // 計算折扣
+    let discountAmount = 0;
+    if (cart.discountType && cart.discountValue) {
+      if (cart.discountType === "fixed") {
+        discountAmount = cart.discountValue;
+      } else if (cart.discountType === "percent") {
+        discountAmount = Math.floor(subtotal * (cart.discountValue / 100));
+      }
+    }
 
     // 運費
     const shippingFee = shippingMethod === "home" ? 190 : 0;
-
-    // 折扣處理（假設你之後會做優惠碼）
-    let discountAmount = 0;
-    if (req.session?.discount) {
-      const d = req.session.discount;
-      if (d.type === "fixed") {
-        discountAmount = d.value;
-      } else if (d.type === "percent") {
-        discountAmount = Math.floor(subtotal * (d.value / 100));
-      }
-    }
 
     const totalAmount = subtotal + shippingFee - discountAmount;
 
@@ -80,19 +91,23 @@ r.post("/", async (req, res) => {
     const order = await prisma.order.create({
       data: {
         orderNo,
+        guestId,
         buyerName: buyer.name,
         email: buyer.email,
         phone: buyer.phone,
         address: buyer.address,
         shippingMethod,
+        shipDate: buyer.shipDate ? new Date(buyer.shipDate) : null,
         subtotal,
         shippingFee,
-        discount: discountAmount,
+        discountType: cart.discountType || null,
+        discountValue: cart.discountValue || null,
+        discountAmount,
         totalAmount,
         status: "PENDING",
         paymentMethod: paymentMethod || "CASH", // 預設 CASH，可由前端傳 "TAPPAY_CREDIT"
         orderitem: {
-          create: items.map((it) => ({
+          create: cart.items.map((it) => ({
             productId: it.productId,
             variantId: it.variantId,
             qty: it.quantity,
@@ -103,9 +118,17 @@ r.post("/", async (req, res) => {
       include: { orderitem: true },
     });
 
+    // 清空購物車（但保留 guestId）
+    await prisma.cartItem.deleteMany({ where: { cartId: guestId } });
+    await prisma.cart.update({
+      where: { guestId },
+      data: { discountType: null, discountValue: null },
+    });
+
     return res.status(201).json({
       orderNo: order.orderNo,
       amount: Number(order.totalAmount),
+      discountAmount,
       status: order.status,
     });
   } catch (err) {
@@ -196,7 +219,9 @@ r.get("/:orderNo", async (req, res) => {
       shipDate: order.shipDate,
       subtotal: order.subtotal,
       shippingFee: order.shippingFee,
-      discount: order.discount,
+      discountType: order.discountType,
+      discountValue: order.discountValue,
+      discountAmount: order.discountAmount,
       totalAmount: order.totalAmount,
       status: order.status, // PENDING / PAID
       paymentMethod: order.paymentMethod,

@@ -13,7 +13,7 @@ export const useCartStore = defineStore("cart", {
     async fetchCart() {
       this.loading = true;
       try {
-        const res = await api.get("/cart", { withCredentials: true });
+        const res = await api.get("/cart");
         this.items = res.data.items;
         this.summary = res.data.summary;
       } catch (err) {
@@ -26,11 +26,7 @@ export const useCartStore = defineStore("cart", {
     // 2. 加入購物車
     async addToCart(variantId, quantity = 1) {
       try {
-        const res = await api.post(
-          "/cart",
-          { variantId, quantity },
-          { withCredentials: true }
-        );
+        const res = await api.post("/cart", { variantId, quantity });
         this.items = res.data.items;
         this.summary = res.data.summary;
       } catch (err) {
@@ -41,11 +37,7 @@ export const useCartStore = defineStore("cart", {
     // 3. 更新商品數量
     async updateQuantity(variantId, quantity) {
       try {
-        const res = await api.put(
-          `/cart/${variantId}`,
-          { quantity },
-          { withCredentials: true }
-        );
+        const res = await api.put(`/cart/${variantId}`, { quantity });
         this.items = res.data.items;
         this.summary = res.data.summary;
       } catch (err) {
@@ -56,9 +48,7 @@ export const useCartStore = defineStore("cart", {
     // 4. 移除單一商品
     async removeItem(variantId) {
       try {
-        const res = await api.delete(`/cart/${variantId}`, {
-          withCredentials: true,
-        });
+        const res = await api.delete(`/cart/${variantId}`);
         this.items = res.data.items;
         this.summary = res.data.summary;
       } catch (err) {
@@ -91,7 +81,7 @@ export const useCartStore = defineStore("cart", {
     // ˙. 清空購物車
     async clearCart() {
       try {
-        const res = await api.delete("/cart", { withCredentials: true });
+        const res = await api.delete("/cart");
         this.items = res.data.items;
         this.summary = res.data.summary;
       } catch (err) {
@@ -103,7 +93,6 @@ export const useCartStore = defineStore("cart", {
   getters: {
     // 總數量
     cartCount: (state) => state.items.reduce((sum, i) => sum + i.quantity, 0),
-    // 總金額（這裡用 state.total，避免前端算錯）
     cartTotal: (state) => state.total,
   },
 });

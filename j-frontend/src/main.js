@@ -4,6 +4,9 @@ import App from "./App.vue";
 import router from "./router";
 import { createPinia } from "pinia";
 window.router = router;
+import { initGuestToken } from "./services/api.js";
+
+initGuestToken();
 
 /* Font Awesome */
 import { library } from "@fortawesome/fontawesome-svg-core";

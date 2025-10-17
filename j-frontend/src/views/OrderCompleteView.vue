@@ -98,6 +98,12 @@
           <div class="mt-3 sm:mt-4 text-right space-y-1 text-xs sm:text-sm">
             <p>小計：NT$ {{ order.subtotal }}</p>
             <p>運費：NT$ {{ order.shippingFee }}</p>
+            <p
+              v-if="order.discountAmount && order.discountAmount > 0"
+              class="text-green-600 font-medium"
+            >
+              折扣金額：-NT$ {{ order.discountAmount }}
+            </p>
             <p class="font-bold text-base sm:text-lg">
               總計：NT$ {{ order.totalAmount }}
             </p>

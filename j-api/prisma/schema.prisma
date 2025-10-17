@@ -54,6 +54,27 @@ model banners {
   fontColor  banners_fontColor? @default(light)
 }
 
+model Cart {
+  guestId        String     @id
+  items          CartItem[]
+  shippingMethod String?    @default("home")
+  discountType   String?
+  discountValue  Float?
+}
+
+model CartItem {
+  id          Int      @id @default(autoincrement())
+  cartId      String
+  productId   Int?
+  variantId   Int?
+  productName String
+  variantName String
+  productImg  String?  @db.Text
+  price       Float
+  quantity    Int
+  Cart        Cart     @relation(fields: [cartId], references: [guestId])
+}
+
 model course {
   id              Int            @id @default(autoincrement())
   title           String
@@ -98,12 +119,18 @@ model order {
   orderNo        String               @unique(map: "Order_orderNo_key")
   buyerName      String
   email          String
+  guestId        String?
   phone          String
   address        String
   shippingMethod order_shippingMethod
+  shipDate       DateTime?
   subtotal       Decimal              @db.Decimal(10, 2)
   shippingFee    Decimal              @db.Decimal(10, 2)
   discount       Decimal              @default(0.00) @db.Decimal(10, 2)
+  discountType   String?
+  discountValue  Float?
+  discountAmount Float?     
+  finalTotal     Float?      
   totalAmount    Decimal              @db.Decimal(10, 2)
   status         order_status         @default(PENDING)
   paymentMethod  order_paymentMethod  

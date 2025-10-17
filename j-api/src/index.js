@@ -17,6 +17,7 @@ import tappay from "./routes/tappay.js";
 import articles from "./routes/articles.js";
 import articleCategories from "./routes/articleCategories.js";
 import articleSubcategories from "./routes/articleSubcategories.js";
+import auth from "./routes/auth.js";
 
 import { sessionMiddleware } from "./middlewares/session.js";
 
@@ -29,7 +30,7 @@ app.use(
       "http://localhost:5173",
       "https://juans-dessert.com", // 前端正式網址
     ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // 允許攜帶 cookie
   })
@@ -65,6 +66,7 @@ app.use("/api/tappay", tappay);
 app.use("/api/articles", articles);
 app.use("/api/article-categories", articleCategories);
 app.use("/api/article-subcategories", articleSubcategories);
+app.use("/api/auth", auth);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API on http://localhost:${port}`));
