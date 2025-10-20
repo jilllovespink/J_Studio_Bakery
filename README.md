@@ -50,8 +50,7 @@ To test the **real payment flow** (Prime → Pay by Prime → order creation), r
 
 ## Demo Video
 
-- **YouTube:** `<link>`
-- **MP4:** `<link>`
+- **YouTube:** `https://youtu.be/nmqCNKN29jQ`
 
 ---
 
@@ -97,8 +96,8 @@ CORS_ORIGIN=http://localhost:5173
 ```bash
 cd j-api
 npm install
-npx prisma migrate deploy
-npx prisma db seed   # optional
+npx prisma migrate reset
+node prisma/seed.js
 npm run dev          # runs at http://localhost:3000
 ```
 

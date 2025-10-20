@@ -22,7 +22,7 @@ r.post("/pay", async (req, res) => {
 
     // 2. 呼叫 TapPay Pay by Prime API
     const result = await axios.post(
-      "https://prod.tappaysdk.com/tpc/payment/pay-by-prime",
+      "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime",
       {
         prime,
         partner_key: PARTNER_KEY,
