@@ -1997,7 +1997,7 @@ async function main() {
           "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fbanner%2Fb4.jpg?alt=media&token=61e2e3ff-2028-48e2-94b2-788ef1ef2452",
         title: "濃醇登場・生巧克力系列",
         buttonText: "探索更多",
-        buttonLink: "/products/classic-cakes/chocolate-cakes",
+        buttonLink: "/products/classic-cakes#chocolate",
         fontColor: "light",
       },
       {
@@ -2005,7 +2005,7 @@ async function main() {
           "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fbanner%2Fb2.jpg?alt=media&token=14c41356-4b11-4ff5-9ab1-63c3982f5b50",
         title: "繽紛馬卡龍・法式下午茶首選",
         buttonText: "前往選購",
-        buttonLink: "/products/macarons/tea-macarons",
+        buttonLink: "/products/macarons",
         fontColor: "dark",
       },
       {
@@ -2013,7 +2013,7 @@ async function main() {
           "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fbanner%2Fb3.jpg?alt=media&token=7a129591-a0d2-42f5-9b36-807621f167dc",
         title: "週末野餐甜點盒・幸福出發",
         buttonText: "立即訂購",
-        buttonLink: "/products/cookies/soft-cookies",
+        buttonLink: "/products/cookies",
         fontColor: "dark",
       },
       {
@@ -2021,7 +2021,7 @@ async function main() {
           "https://firebasestorage.googleapis.com/v0/b/course-platform-3fe65.firebasestorage.app/o/j%20studio%2Fbanner%2Fb5.jpg?alt=media&token=592d5d47-7b8e-4655-90db-90862990ee9f",
         title: "香氣綻放・生乳酪蛋糕",
         buttonText: "看更多口味",
-        buttonLink: "/products/classic-cakes/baked-cheesecake",
+        buttonLink: "/products/detail/baked-cheesecake",
         fontColor: "light",
       },
     ],
