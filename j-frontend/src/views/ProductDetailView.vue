@@ -60,7 +60,6 @@
           <button class="btn btn-primary ml-6" @click="addToCart">
             加入購物車
           </button>
-          <button class="btn btn-secondary">立即購買</button>
         </div>
       </div>
 
