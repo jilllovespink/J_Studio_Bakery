@@ -123,8 +123,6 @@ npm run dev          # runs at http://localhost:5173
 2. The frontend obtains a **Prime token**, sends it to backend `/api/tappay/pay-by-prime`, which calls TapPay Sandbox and returns a simulated payment result.
 3. Check backend logs and database for the order record.
 
-> If you see an authorization error, verify `.env` keys and confirm your local IP is added to the TapPay Sandbox whitelist.
-
 ---
 
 ## API Endpoints (Summary)
